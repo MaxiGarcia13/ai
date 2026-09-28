@@ -15,6 +15,7 @@ Use it on the **server** — API routes, backend services, or any server-side co
 ```ts
 import { AiClient } from "@maxigarcia/ai-router";
 
+// set up once on the server
 const client = await AiClient({
   order: ["groq", "open-router"],
   providerConfig: {
@@ -31,6 +32,7 @@ const client = await AiClient({
   },
 });
 
+// call from your endpoint handler
 const messages = [{ role: "user" as const, content: "Summarize this PR diff" }];
 
 const stream = await client.create(messages);
@@ -41,13 +43,24 @@ for await (const chunk of stream) {
 }
 ```
 
-### Options
+### `AiClient` options
 
 | Option                        | Description                              |
 | ----------------------------- | ---------------------------------------- |
 | `order`                       | Provider fallback / rotation order       |
 | `providerConfig[name].apiKey` | Required API key for that provider       |
 | `providerConfig[name].model`  | Optional default model for that provider |
+
+### `client.create(messages, options?)`
+
+| Option        | Description                                              |
+| ------------- | -------------------------------------------------------- |
+| `messages`    | Chat messages (first argument)                           |
+| `model`       | Model for this request (falls back to provider default)  |
+| `stream`      | Stream the response — defaults to `true`                 |
+| `temperature` | Sampling temperature                                     |
+| `max_tokens`  | Maximum tokens to generate                               |
+| `tools`       | Tool / function definitions                              |
 
 ### Behavior
 
