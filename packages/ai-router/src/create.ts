@@ -4,6 +4,7 @@ import type { AiClientOptions } from './types.js';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
+import { uniqueProvider } from './unique-provider.js';
 
 export function createAiRequest(
   { order, providerConfig }: AiClientOptions,
@@ -12,7 +13,10 @@ export function createAiRequest(
 ) {
   return async (messages: ChatCompletionMessageParam[], options: ChatCompletionCreateParamsStreaming) => {
     const errors: { providerName: AiProviderName; error: unknown }[] = [];
-    const providersOrder = balanceProvidersOrder(lastUsedProvider, order);
+    const providersOrder = balanceProvidersOrder(
+      lastUsedProvider,
+      uniqueProvider(order),
+    );
 
     for (const providerName of providersOrder) {
       const config = providerConfig[providerName];
