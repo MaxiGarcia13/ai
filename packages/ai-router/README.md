@@ -2,7 +2,7 @@
 
 ## What is it for?
 
-Routes chat completion requests across multiple AI providers (`groq`, `open-router`).
+Routes chat completion requests across multiple AI providers (`gemini`, `groq`, `open-router`).
 
 If one provider fails, the next in your `order` list is tried automatically. After a successful request, the next call starts from the last used provider so traffic is balanced across them.
 
@@ -10,36 +10,45 @@ If one provider fails, the next in your `order` list is tried automatically. Aft
 
 Use it on the **server** — API routes, backend services, or any server-side code that holds provider API keys. Do not use it in the browser; keys must stay private.
 
+### Get API keys
+
+| Provider      | Get your key                                                                                    |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| `gemini`      | [Google AI Studio](https://aistudio.google.com/app/api-keys?project=gen-lang-client-0964537707) |
+| `groq`        | [GroqCloud Console](https://console.groq.com/keys)                                              |
+| `open-router` | [OpenRouter](https://openrouter.ai/workspaces/default/keys)                                     |
+
 ## How to use it?
 
 ```ts
-import { AiClient } from "@maxigarcia/ai-router";
+import { AiClient } from '@maxigarcia/ai-router';
 
 // set up once on the server
 const client = await AiClient({
-  order: ["groq", "open-router"],
+  order: ['groq', 'open-router'],
   providerConfig: {
-    groq: {
+    'groq': {
       apiKey: process.env.GROQ_API_KEY!,
       // optional — defaults to 'openai/gpt-oss-120b'
-      model: "openai/gpt-oss-120b",
+      model: 'openai/gpt-oss-120b',
     },
-    "open-router": {
+    'open-router': {
       apiKey: process.env.OPENROUTER_API_KEY!,
       // optional — defaults to 'openrouter/free'
-      model: "openrouter/free",
+      model: 'openrouter/free',
     },
   },
 });
 
 // call from your endpoint handler
-const messages = [{ role: "user" as const, content: "Summarize this PR diff" }];
+const messages = [{ role: 'user' as const, content: 'Summarize this PR diff' }];
 
 const stream = await client.create(messages);
 
 for await (const chunk of stream) {
   const text = chunk.choices[0]?.delta?.content;
-  if (text) process.stdout.write(text);
+  if (text)
+    process.stdout.write(text);
 }
 ```
 
@@ -53,14 +62,14 @@ for await (const chunk of stream) {
 
 ### `client.create(messages, options?)`
 
-| Option        | Description                                              |
-| ------------- | -------------------------------------------------------- |
-| `messages`    | Chat messages (first argument)                           |
-| `model`       | Model for this request (falls back to provider default)  |
-| `stream`      | Stream the response — defaults to `true`                 |
-| `temperature` | Sampling temperature                                     |
-| `max_tokens`  | Maximum tokens to generate                               |
-| `tools`       | Tool / function definitions                              |
+| Option        | Description                                             |
+| ------------- | ------------------------------------------------------- |
+| `messages`    | Chat messages (first argument)                          |
+| `model`       | Model for this request (falls back to provider default) |
+| `stream`      | Stream the response — defaults to `true`                |
+| `temperature` | Sampling temperature                                    |
+| `max_tokens`  | Maximum tokens to generate                              |
+| `tools`       | Tool / function definitions                             |
 
 ### Behavior
 
