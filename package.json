@@ -3,15 +3,9 @@
   "type": "module",
   "version": "0.0.0",
   "description": "A unified TypeScript library to seamlessly connect and switch between multiple AI providers.",
-  "keywords": [
-    "ai",
-    "ai-gateway",
-    "gateway"
-  ],
+  "author": "Maximiliano Garcia Mortigliengo",
+  "license": "ISC",
   "homepage": "https://github.com/MaxiGarcia13/ai-gatway#readme",
-  "bugs": {
-    "url": "https://github.com/MaxiGarcia13/ai-gatway/issues"
-  },
   "workspaces": [
     "packages/*"
   ],
@@ -19,14 +13,22 @@
     "type": "git",
     "url": "git+https://github.com/MaxiGarcia13/ai-gatway.git"
   },
-  "license": "ISC",
-  "author": "Maximiliano Garcia Mortigliengo",
+  "bugs": {
+    "url": "https://github.com/MaxiGarcia13/ai-gatway/issues"
+  },
+  "keywords": [
+    "ai",
+    "ai-gateway",
+    "gateway"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@maxigarcia/eslint-config": "^1.14.1",
     "@nx/js": "^23.2.1",
     "nx": "^23.2.1",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   }
 }
