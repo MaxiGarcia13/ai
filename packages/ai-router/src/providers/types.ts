@@ -1,7 +1,7 @@
 import type { ClientOptions } from 'openai';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 
-export type AiProviderName = 'groq' | 'open-router';
+export type AiProviderName = 'groq' | 'open-router' | 'gemini';
 
 export interface AiProviderConfig<ProviderName extends AiProviderName = AiProviderName> {
   getClientOptions: (url: string) => ClientOptions;
@@ -16,4 +16,5 @@ export interface AiProviderConfig<ProviderName extends AiProviderName = AiProvid
 export interface AiProviderModels {
   'groq': 'openai/gpt-oss-120b';
   'open-router': 'openrouter/free';
+  'gemini': 'gemini-3.7-flash';
 }
