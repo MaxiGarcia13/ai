@@ -1,6 +1,6 @@
 import type { AiProviderModels, AiProviderName } from './providers/types.js';
 
-export interface AiClientOptions {
+export interface AiRouterOptions {
   order: Array<AiProviderName>;
   providerConfig: {
     [key in AiProviderName]: {

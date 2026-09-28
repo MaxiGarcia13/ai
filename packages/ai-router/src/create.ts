@@ -1,13 +1,13 @@
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
 import type { AiProviderName } from './providers/types.js';
-import type { AiClientOptions } from './types.js';
+import type { AiRouterOptions } from './types.js';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
 import { uniqueProvider } from './unique-provider.js';
 
 export function createAiRequest(
-  { order, providerConfig }: AiClientOptions,
+  { order, providerConfig }: AiRouterOptions,
   lastUsedProvider: AiProviderName | null,
   setLastUsedProvider: (provider: AiProviderName) => void,
 ) {
