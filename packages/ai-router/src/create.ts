@@ -11,7 +11,10 @@ export function createAiRequest(
   lastUsedProvider: AiProviderName | null,
   setLastUsedProvider: (provider: AiProviderName) => void,
 ) {
-  return async (messages: ChatCompletionMessageParam[], options: ChatCompletionCreateParamsStreaming) => {
+  return async (
+    messages: ChatCompletionMessageParam[],
+    options: Omit<ChatCompletionCreateParamsStreaming, 'messages'>,
+  ) => {
     const errors: { providerName: AiProviderName; error: unknown }[] = [];
     const providersOrder = balanceProvidersOrder(
       lastUsedProvider,
