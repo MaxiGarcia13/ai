@@ -2,7 +2,7 @@
   "name": "ai",
   "type": "module",
   "version": "0.0.0",
-  "description": "A unified TypeScript library to seamlessly connect and switch between multiple AI providers.",
+  "description": "Lightweight, fault-tolerant library that seamlessly routes your AI requests across multiple providers",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
   "homepage": "https://github.com/MaxiGarcia13/ai#readme",
