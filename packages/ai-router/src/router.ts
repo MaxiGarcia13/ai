@@ -11,6 +11,10 @@ export async function AiRouter(options: AiRouterOptions) {
 
   return {
     lastUsedProvider,
-    create: createAiRequest(options, lastUsedProvider, setLastUsedProvider),
+    create: createAiRequest(
+      options,
+      lastUsedProvider,
+      setLastUsedProvider,
+    ),
   };
 }
