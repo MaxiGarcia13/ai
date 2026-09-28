@@ -1,5 +1,5 @@
 {
-  "name": "ai-gatway-monorepo",
+  "name": "ai-gatway",
   "type": "module",
   "version": "0.0.0",
   "description": "A unified TypeScript library to seamlessly connect and switch between multiple AI providers.",
