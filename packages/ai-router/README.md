@@ -21,33 +21,34 @@ Use it on the **server** — API routes, backend services, or any server-side co
 ## How to use it?
 
 ```ts
-import { AiRouter } from "@maxigarcia/ai-router";
+import { AiRouter } from '@maxigarcia/ai-router';
 
 // set up once on the server
-const router = await AiRouter({
-  order: ["groq", "open-router"],
+const router = AiRouter({
+  order: ['groq', 'open-router'],
   providerConfig: {
-    groq: {
+    'groq': {
       apiKey: process.env.GROQ_API_KEY!,
       // optional — defaults to 'openai/gpt-oss-120b'
-      model: "openai/gpt-oss-120b",
+      model: 'openai/gpt-oss-120b',
     },
-    "open-router": {
+    'open-router': {
       apiKey: process.env.OPENROUTER_API_KEY!,
       // optional — defaults to 'openrouter/free'
-      model: "openrouter/free",
+      model: 'openrouter/free',
     },
   },
 });
 
 // call from your endpoint handler
-const messages = [{ role: "user" as const, content: "Summarize this PR diff" }];
+const messages = [{ role: 'user' as const, content: 'Summarize this PR diff' }];
 
 const stream = await router.create(messages);
 
 for await (const chunk of stream) {
   const text = chunk.choices[0]?.delta?.content;
-  if (text) process.stdout.write(text);
+  if (text)
+    process.stdout.write(text);
 }
 ```
 
