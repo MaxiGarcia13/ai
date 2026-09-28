@@ -22,8 +22,12 @@
     "gateway"
   ],
   "scripts": {
+    "build": "nx run-many --target=build",
+    "test": "nx run-many --target=test",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
+    "phoenix": "npm run clean && npm i"
   },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
