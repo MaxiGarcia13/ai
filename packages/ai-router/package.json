@@ -5,7 +5,7 @@
   "description": "Lightweight, fault-tolerant library that seamlessly routes your AI requests across multiple providers",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
-  "homepage": "https://github.com/MaxiGarcia13/ai#readme",
+  "homepage": "https://github.com/MaxiGarcia13/ai/blob/main/packages/ai-router/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaxiGarcia13/ai.git"
