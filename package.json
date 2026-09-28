@@ -5,16 +5,16 @@
   "description": "A unified TypeScript library to seamlessly connect and switch between multiple AI providers.",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
-  "homepage": "https://github.com/MaxiGarcia13/ai-gatway#readme",
+  "homepage": "https://github.com/MaxiGarcia13/ai#readme",
   "workspaces": [
     "packages/*"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MaxiGarcia13/ai-gatway.git"
+    "url": "git+https://github.com/MaxiGarcia13/ai.git"
   },
   "bugs": {
-    "url": "https://github.com/MaxiGarcia13/ai-gatway/issues"
+    "url": "https://github.com/MaxiGarcia13/ai/issues"
   },
   "keywords": [
     "ai",
