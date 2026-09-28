@@ -21,7 +21,8 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "clean": "rm -rf dist node_modules"
+    "clean": "rm -rf dist node_modules",
+    "test": "vitest run"
   },
   "dependencies": {
     "openai": "^7.23.0"
