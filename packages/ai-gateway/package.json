@@ -12,5 +12,18 @@
   },
   "bugs": {
     "url": "https://github.com/MaxiGarcia13/ai-gatway/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "openai": "^7.23.0"
   }
 }
