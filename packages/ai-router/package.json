@@ -25,5 +25,8 @@
   },
   "dependencies": {
     "openai": "^7.23.0"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.2"
   }
 }
