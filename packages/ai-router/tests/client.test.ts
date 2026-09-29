@@ -1,5 +1,5 @@
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
-import type { AiClientOptions } from '../src/types.js';
+import type { AiRouterOptions } from '../src/types.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createMock = vi.fn();
@@ -18,7 +18,7 @@ vi.mock('openai', () => ({
   default: OpenAIMock,
 }));
 
-const { AiClient } = await import('../src/client.js');
+const { AiRouter } = await import('../src/router.js');
 
 const messages: ChatCompletionMessageParam[] = [{ role: 'user', content: 'hello' }];
 const callerOptions = {
@@ -27,7 +27,7 @@ const callerOptions = {
   stream: true,
 } as ChatCompletionCreateParamsStreaming;
 
-const options: AiClientOptions = {
+const options: AiRouterOptions = {
   order: ['groq', 'open-router'],
   providerConfig: {
     'groq': { apiKey: 'groq-key' },
@@ -45,7 +45,7 @@ describe('aiClient', () => {
     const response = { id: 'completion-1' };
     createMock.mockResolvedValueOnce(response);
 
-    const client = await AiClient(options);
+    const client = AiRouter(options);
 
     expect(client.create).toBeTypeOf('function');
     expect(client.lastUsedProvider).toBeNull();
@@ -63,7 +63,7 @@ describe('aiClient', () => {
     const response = { id: 'completion-2' };
     createMock.mockRejectedValueOnce(new Error('groq down')).mockResolvedValueOnce(response);
 
-    const client = await AiClient(options);
+    const client = AiRouter(options);
     const result = await client.create(messages, callerOptions);
 
     expect(result).toBe(response);
