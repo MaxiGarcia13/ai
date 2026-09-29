@@ -1,3 +1,17 @@
+## 0.0.5 (2026-09-29)
+
+### 🚀 Features
+
+- Introduce @maxigarcia/ai-types package for shared TypeScript types and update ai-router to utilize these types ([45d71b4](https://github.com/MaxiGarcia13/ai/commit/45d71b4))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.1
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.4 (2026-09-29)
 
 ### 🔄 Refactors
