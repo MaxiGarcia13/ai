@@ -1,10 +1,10 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
 import type { AiRouterOptions } from './types.js';
+import { trimMessagesToContext } from '@maxigarcia/ai-utils';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
-import { trimMessagesToContext } from './trim-messages-to-context.js';
 import { uniqueProvider } from './unique-provider.js';
 
 function getMessageContent(message: ChatCompletionMessageParam): string {

@@ -17,6 +17,7 @@
   "release": {
     "projects": [
       "packages/ai-types",
+      "packages/ai-utils",
       "packages/ai-router",
       "!packages/ai-client"
     ],

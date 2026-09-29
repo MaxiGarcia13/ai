@@ -1,11 +1,11 @@
 {
-  "name": "@maxigarcia/ai-router",
+  "name": "@maxigarcia/ai-utils",
   "type": "module",
-  "version": "0.0.8",
-  "description": "Lightweight, fault-tolerant library that seamlessly routes your AI requests across multiple providers",
+  "version": "0.0.0",
+  "description": "Shared utilities for AI message handling and context management",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
-  "homepage": "https://github.com/MaxiGarcia13/ai/blob/main/packages/ai-router/README.md",
+  "homepage": "https://github.com/MaxiGarcia13/ai/blob/main/packages/ai-utils/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaxiGarcia13/ai.git"
@@ -36,8 +36,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@maxigarcia/ai-types": "*",
-    "@maxigarcia/ai-utils": "*",
     "openai": "^7.23.0"
   },
   "devDependencies": {
