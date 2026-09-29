@@ -1,4 +1,5 @@
-import type { AiProviderConfig, AiProviderName } from '@maxigarcia/ai-types';
+import type { AiProviderName } from '@maxigarcia/ai-types';
+import type { AiProviderConfig } from './types.js';
 import { getGeminiProvider } from './gemini.js';
 import { getGroqProvider } from './groq.js';
 import { getOpenRouterProvider } from './open-router.js';
