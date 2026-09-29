@@ -1,3 +1,17 @@
+## 0.0.6 (2026-09-29)
+
+### 🔄 Refactors
+
+- Move AiRouterOptions type definition to a new file and update imports across the project ([8ffdaae](https://github.com/MaxiGarcia13/ai/commit/8ffdaae))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.2
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.5 (2026-09-29)
 
 ### 🚀 Features
