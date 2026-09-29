@@ -1,0 +1,40 @@
+{
+  "name": "@maxigarcia/ai-client",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Browser client for streaming AI chat completions over HTTP NDJSON",
+  "author": "Maximiliano Garcia Mortigliengo",
+  "license": "ISC",
+  "homepage": "https://github.com/MaxiGarcia13/ai/blob/main/packages/ai-client/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaxiGarcia13/ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MaxiGarcia13/ai/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "openai": "^7.23.0"
+  }
+}
