@@ -1,6 +1,6 @@
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import type { AiProviderName } from '../src/providers/types.js';
-import type { AiClientOptions } from '../src/types.js';
+import type { AiRouterOptions } from '../src/types.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createMock = vi.fn();
@@ -28,9 +28,9 @@ const callerOptions = {
   stream: true,
 } as ChatCompletionCreateParamsStreaming;
 
-const baseOptions: AiClientOptions = {
-  order: ['groq', 'open-router'],
-  providerConfig: {
+const baseOptions: AiRouterOptions = {
+  fallback: ['groq', 'open-router'],
+  providers: {
     'groq': { apiKey: 'groq-key' },
     'open-router': { apiKey: 'open-router-key' },
   },
@@ -120,9 +120,9 @@ describe('createAiRequest', () => {
 
   it('throws when the api key is missing and does not call OpenAI', async () => {
     const setLastUsedProvider = vi.fn();
-    const options: AiClientOptions = {
-      order: ['groq', 'open-router'],
-      providerConfig: {
+    const options: AiRouterOptions = {
+      fallback: ['groq', 'open-router'],
+      providers: {
         'groq': { apiKey: '' },
         'open-router': { apiKey: 'open-router-key' },
       },
@@ -139,13 +139,13 @@ describe('createAiRequest', () => {
 
   it('throws when the provider name is unknown', async () => {
     const setLastUsedProvider = vi.fn();
-    const options: AiClientOptions = {
-      order: ['unknown' as AiProviderName],
-      providerConfig: {
+    const options: AiRouterOptions = {
+      fallback: ['unknown' as AiProviderName],
+      providers: {
         'groq': { apiKey: 'groq-key' },
         'open-router': { apiKey: 'open-router-key' },
         ...({ unknown: { apiKey: 'unknown-key' } } as object),
-      } as AiClientOptions['providerConfig'],
+      } as AiRouterOptions['providers'],
     };
 
     const create = createAiRequest(options, null, setLastUsedProvider);

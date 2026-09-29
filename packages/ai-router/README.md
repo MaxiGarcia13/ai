@@ -4,7 +4,7 @@
 
 Routes chat completion requests across multiple AI providers (`gemini`, `groq`, `open-router`).
 
-If one provider fails, the next in your `order` list is tried automatically. After a successful request, the next call starts from the last used provider so traffic is balanced across them.
+If one provider fails, the next in your `fallback` list is tried automatically. After a successful request, the next call starts from the last used provider so traffic is balanced across them.
 
 ## Where to use it?
 
@@ -25,8 +25,8 @@ import { AiRouter } from '@maxigarcia/ai-router';
 
 // set up once on the server
 const router = AiRouter({
-  order: ['groq', 'open-router'],
-  providerConfig: {
+  fallback: ['groq', 'open-router'],
+  providers: {
     'groq': {
       apiKey: process.env.GROQ_API_KEY!,
       // optional — defaults to 'openai/gpt-oss-120b'
@@ -54,11 +54,11 @@ for await (const chunk of stream) {
 
 ### `AiRouter` options
 
-| Option                        | Description                              |
-| ----------------------------- | ---------------------------------------- |
-| `order`                       | Provider fallback / rotation order       |
-| `providerConfig[name].apiKey` | Required API key for that provider       |
-| `providerConfig[name].model`  | Optional default model for that provider |
+| Option                   | Description                              |
+| ------------------------ | ---------------------------------------- |
+| `fallback`               | Provider fallback / rotation order       |
+| `providers[name].apiKey` | Required API key for that provider       |
+| `providers[name].model`  | Optional default model for that provider |
 
 ### `client.create(messages, options?)`
 
@@ -73,6 +73,6 @@ for await (const chunk of stream) {
 
 ### Behavior
 
-1. Tries providers in `order` (rotated from the last successful one when available).
+1. Tries providers in `fallback` (rotated from the last successful one when available).
 2. On failure, moves to the next provider.
 3. If every provider fails, rejects with an array of `{ providerName, error }`.

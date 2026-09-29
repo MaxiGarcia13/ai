@@ -7,7 +7,7 @@ import { getAiProvider } from './providers/index.js';
 import { uniqueProvider } from './unique-provider.js';
 
 export function createAiRequest(
-  { order, providerConfig }: AiRouterOptions,
+  { fallback, providers }: AiRouterOptions,
   lastUsedProvider: AiProviderName | null,
   setLastUsedProvider: (provider: AiProviderName) => void,
 ) {
@@ -16,11 +16,11 @@ export function createAiRequest(
     options: Omit<ChatCompletionCreateParamsStreaming, 'messages'>,
   ) => {
     const errors: { providerName: AiProviderName; error: unknown }[] = [];
-    const providers = uniqueProvider(order);
-    const providersOrder = balanceProvidersOrder(lastUsedProvider, providers);
+    const providerNames = uniqueProvider(fallback);
+    const providersOrder = balanceProvidersOrder(lastUsedProvider, providerNames);
 
     for (const providerName of providersOrder) {
-      const config = providerConfig[providerName];
+      const config = providers[providerName];
 
       if (!config?.apiKey) {
         throw new Error(`API key for provider ${providerName} not found`);
