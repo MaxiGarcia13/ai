@@ -32,15 +32,11 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "rm -rf dist node_modules",
-    "test": "vitest run"
+    "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
     "@maxigarcia/ai-types": "*",
     "@maxigarcia/ai-utils": "*",
     "openai": "^7.23.0"
-  },
-  "devDependencies": {
-    "vitest": "^5.0.2"
   }
 }

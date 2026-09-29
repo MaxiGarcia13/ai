@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "nx run-many --target=build",
-    "test": "nx run-many --target=test",
+    "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
@@ -34,6 +34,7 @@
     "@maxigarcia/eslint-config": "^1.14.1",
     "@nx/js": "^23.2.1",
     "nx": "^23.2.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.2"
   }
 }
