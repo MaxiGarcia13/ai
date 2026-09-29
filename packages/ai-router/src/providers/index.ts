@@ -1,4 +1,5 @@
 import type { AiProviderConfig, AiProviderName } from './types.js';
+import { getGeminiProvider } from './gemini.js';
 import { getGroqProvider } from './groq.js';
 import { getOpenRouterProvider } from './open-router.js';
 
@@ -7,6 +8,7 @@ type Provider<ProviderName extends AiProviderName> = (apiKey: string) => AiProvi
 const providers: { [Name in AiProviderName]: Provider<Name> } = {
   'groq': getGroqProvider,
   'open-router': getOpenRouterProvider,
+  'gemini': getGeminiProvider,
 };
 
 export function getAiProvider<
