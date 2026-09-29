@@ -1,9 +1,9 @@
-export class LLMError extends Error {
+export class AIError extends Error {
   readonly status?: number;
 
   constructor(message: string, status?: number) {
     super(message);
-    this.name = 'LLMError';
+    this.name = 'AIError';
     this.status = status;
   }
 }
