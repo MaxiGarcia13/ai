@@ -1,3 +1,17 @@
+## 0.0.4 (2026-09-29)
+
+### 🔄 Refactors
+
+- Enhance type safety in AiRouterOptions and createAiRequest by introducing generics for fallback providers ([adcf6f8](https://github.com/MaxiGarcia13/ai/commit/adcf6f8))
+
+### 🧪 Tests
+
+- Add unit tests for AiRouter to validate completion handling and provider fallback logic ([aad1e92](https://github.com/MaxiGarcia13/ai/commit/aad1e92))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.3 (2026-09-29)
 
 ### 🔄 Refactors
