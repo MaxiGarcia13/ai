@@ -1,3 +1,20 @@
+## 0.0.9 (2026-09-29)
+
+### 🚀 Features
+
+- Integrate Vitest for testing across packages ([99fb8c5](https://github.com/MaxiGarcia13/ai/commit/99fb8c5))
+- Introduce ai-utils package for shared AI utilities ([0a49f4c](https://github.com/MaxiGarcia13/ai/commit/0a49f4c))
+- Enhance AI router with message trimming and model limits ([3923ec3](https://github.com/MaxiGarcia13/ai/commit/3923ec3))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.5
+- Updated @maxigarcia/ai-utils to 0.0.1
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.8 (2026-09-29)
 
 ### 🧱 Updated Dependencies
