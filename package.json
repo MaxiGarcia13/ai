@@ -27,7 +27,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "nx run-many --target=clean && rm -rf node_modules package-lock.json",
-    "phoenix": "npm run clean && npm i"
+    "phoenix": "npm run clean && npm i",
+    "bump-version": "nx release --first-release"
   },
   "devDependencies": {
     "@maxigarcia/eslint-config": "^1.14.1",
