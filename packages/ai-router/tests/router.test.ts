@@ -27,7 +27,7 @@ const callerOptions = {
   stream: true,
 } as ChatCompletionCreateParamsStreaming;
 
-const options: AiRouterOptions = {
+const options: AiRouterOptions<['groq', 'open-router']> = {
   fallback: ['groq', 'open-router'],
   providers: {
     'groq': { apiKey: 'groq-key' },

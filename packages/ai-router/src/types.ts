@@ -1,12 +1,15 @@
 import type { AiProviderModels, AiProviderName } from './providers/types.js';
 
-export interface AiRouterOptions {
-  fallback: Array<AiProviderName>;
-  providers: Partial<{
-    [key in AiProviderName]: {
-      apiKey: string;
-      url?: string;
-      model?: AiProviderModels[key];
-    };
-  }>;
+interface ProviderEntry<K extends AiProviderName> {
+  apiKey: string;
+  model?: AiProviderModels[K];
+}
+
+export interface AiRouterOptions<
+  TFallback extends Array<AiProviderName> = Array<AiProviderName>,
+> {
+  fallback: TFallback;
+  providers: {
+    [K in TFallback[number]]: ProviderEntry<K>;
+  };
 }

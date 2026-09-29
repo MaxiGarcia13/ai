@@ -2,7 +2,9 @@ import type { AiProviderName } from './providers/types.js';
 import type { AiRouterOptions } from './types.js';
 import { createAiRequest } from './create.js';
 
-export function AiRouter(options: AiRouterOptions) {
+export function AiRouter<const TFallback extends Array<AiProviderName>>(
+  options: AiRouterOptions<TFallback>,
+) {
   let lastUsedProvider: AiProviderName | null = null;
 
   const setLastUsedProvider = (provider: AiProviderName) => {

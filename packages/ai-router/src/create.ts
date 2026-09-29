@@ -6,8 +6,8 @@ import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
 import { uniqueProvider } from './unique-provider.js';
 
-export function createAiRequest(
-  { fallback, providers }: AiRouterOptions,
+export function createAiRequest<const TFallback extends Array<AiProviderName>>(
+  { fallback, providers }: AiRouterOptions<TFallback>,
   lastUsedProvider: AiProviderName | null,
   setLastUsedProvider: (provider: AiProviderName) => void,
 ) {
@@ -20,7 +20,7 @@ export function createAiRequest(
     const providersOrder = balanceProvidersOrder(lastUsedProvider, providerNames);
 
     for (const providerName of providersOrder) {
-      const config = providers[providerName];
+      const config = providers[providerName as TFallback[number]];
 
       if (!config?.apiKey) {
         throw new Error(`API key for provider ${providerName} not found`);
