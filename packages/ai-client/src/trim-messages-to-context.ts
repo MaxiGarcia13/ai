@@ -17,7 +17,7 @@ const CHAT_TEMPLATE_OVERHEAD_CHARS = 32;
 /**
  *
  * @param {Options} options - The options for the function.
- * @param {ChatCompletionCreateParamsStreaming['messages']} options.messages - The messages to slice.
+ * @param {ChatCompletionCreateParamsStreaming['messages']} options.messages - The messages to trim.
  * @param {string} options.systemPrompt - The system prompt to use.
  * @param {number} [options.contextWindowSize] - The context window size to use.
  * @param {number} [options.maxOutputTokens] - The maximum output tokens to use.
@@ -26,7 +26,7 @@ const CHAT_TEMPLATE_OVERHEAD_CHARS = 32;
  * @returns
  */
 
-export function sliceMessagesByContextWindowSize(
+export function trimMessagesToContext(
   {
     messages,
     systemPrompt,
