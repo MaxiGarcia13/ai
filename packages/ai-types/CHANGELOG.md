@@ -1,3 +1,13 @@
+## 0.0.3 (2026-09-29)
+
+### 🔄 Refactors
+
+- Update provider imports to use local types and add new types file for AiProviderConfig ([c520b17](https://github.com/MaxiGarcia13/ai/commit/c520b17))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.2 (2026-09-29)
 
 ### 🔄 Refactors
