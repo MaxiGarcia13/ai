@@ -1,8 +1,8 @@
-import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources.js';
+import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
 
 interface Options {
   messages: ChatCompletionCreateParamsStreaming['messages'];
-  systemPrompt: string;
+  systemPrompt?: string;
   contextWindowSize?: number;
   maxOutputTokens?: number;
   charsPerToken?: number;
@@ -15,21 +15,21 @@ const CHARS_PER_TOKEN = 4;
 const CHAT_TEMPLATE_OVERHEAD_CHARS = 32;
 
 /**
+ * Trims conversation messages so they fit within a model's context window.
  *
  * @param {Options} options - The options for the function.
  * @param {ChatCompletionCreateParamsStreaming['messages']} options.messages - The messages to trim.
- * @param {string} options.systemPrompt - The system prompt to use.
+ * @param {string} [options.systemPrompt] - System prompt counted against the budget but not returned.
  * @param {number} [options.contextWindowSize] - The context window size to use.
- * @param {number} [options.maxOutputTokens] - The maximum output tokens to use.
- * @param {number} [options.charsPerToken] - The characters per token to use.
- * @param {number} [options.chatTemplateOverheadChars] - The chat template overhead characters to use.
- * @returns
+ * @param {number} [options.maxOutputTokens] - Tokens reserved for the model output.
+ * @param {number} [options.charsPerToken] - Approximate characters per token.
+ * @param {number} [options.chatTemplateOverheadChars] - Per-message chat template overhead in chars.
+ * @returns Trimmed messages that fit the remaining input budget.
  */
-
 export function trimMessagesToContext(
   {
     messages,
-    systemPrompt,
+    systemPrompt = '',
     contextWindowSize = CONTEXT_WINDOW_SIZE,
     maxOutputTokens = MAX_OUTPUT_TOKENS,
     charsPerToken = CHARS_PER_TOKEN,

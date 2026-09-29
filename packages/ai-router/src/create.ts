@@ -4,7 +4,32 @@ import type { AiRouterOptions } from './types.js';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
+import { trimMessagesToContext } from './trim-messages-to-context.js';
 import { uniqueProvider } from './unique-provider.js';
+
+function getMessageContent(message: ChatCompletionMessageParam): string {
+  return typeof message.content === 'string' ? message.content : '';
+}
+
+function trimMessagesForModel(
+  messages: ChatCompletionMessageParam[],
+  contextWindowSize: number,
+  maxOutputTokens: number,
+): ChatCompletionMessageParam[] {
+  const systemMessages = messages.filter((message) => message.role === 'system');
+  const conversationMessages = messages.filter((message) => message.role !== 'system');
+  const systemPrompt = systemMessages.map(getMessageContent).join('\n');
+
+  return [
+    ...systemMessages,
+    ...trimMessagesToContext({
+      messages: conversationMessages,
+      systemPrompt,
+      contextWindowSize,
+      maxOutputTokens,
+    }),
+  ];
+}
 
 export function createAiRequest<const TFallback extends Array<AiProviderName>>(
   { fallback, providers }: AiRouterOptions<TFallback>,
@@ -36,7 +61,21 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
 
       try {
         const client = new OpenAI(provider.getClientOptions(config.apiKey));
-        const createParams = provider.getCreateParams({ messages, model: config.model });
+        const baseParams = provider.getCreateParams({ messages, model: config.model });
+        const model = options.model ?? baseParams.model;
+        const limits = provider.getModelLimits(model);
+        const maxOutputTokens = options.max_completion_tokens
+          ?? options.max_tokens
+          ?? limits.maxOutputTokens;
+        const trimmedMessages = trimMessagesForModel(
+          messages,
+          limits.contextWindowSize,
+          maxOutputTokens,
+        );
+        const createParams = provider.getCreateParams({
+          messages: trimmedMessages,
+          model: config.model,
+        });
 
         const response = await client.chat.completions.create({
           ...createParams,

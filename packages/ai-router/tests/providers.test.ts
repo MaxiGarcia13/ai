@@ -35,6 +35,24 @@ describe('getGroqProvider', () => {
       stream: true,
     });
   });
+
+  it('returns model limits for the default groq model', () => {
+    const provider = getGroqProvider('groq-key');
+
+    expect(provider.getModelLimits()).toEqual({
+      contextWindowSize: 131_072,
+      maxOutputTokens: 1024,
+    });
+  });
+
+  it('falls back to default limits for unknown models', () => {
+    const provider = getGroqProvider('groq-key');
+
+    expect(provider.getModelLimits('unknown-model')).toEqual({
+      contextWindowSize: 131_072,
+      maxOutputTokens: 1024,
+    });
+  });
 });
 
 describe('getOpenRouterProvider', () => {
@@ -64,6 +82,15 @@ describe('getOpenRouterProvider', () => {
       model: 'openrouter/free',
       messages,
       stream: true,
+    });
+  });
+
+  it('returns model limits for the default open-router model', () => {
+    const provider = getOpenRouterProvider('open-router-key');
+
+    expect(provider.getModelLimits()).toEqual({
+      contextWindowSize: 128_000,
+      maxOutputTokens: 1024,
     });
   });
 });

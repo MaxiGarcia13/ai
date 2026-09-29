@@ -1,4 +1,4 @@
-import type { ChatCompletionMessageParam } from 'openai/resources.js';
+import type { ChatCompletionMessageParam } from 'openai/resources';
 import { describe, expect, it } from 'vitest';
 import { trimMessagesToContext } from '../src/trim-messages-to-context.js';
 
