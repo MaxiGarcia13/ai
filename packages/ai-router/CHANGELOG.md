@@ -1,3 +1,13 @@
+## 0.0.2 (2026-09-29)
+
+### 🔄 Refactors
+
+- Simplify provider order calculation in createAiRequest function ([3e36dba](https://github.com/MaxiGarcia13/ai/commit/3e36dba))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.1 (2026-09-29)
 
 ### 🚀 Features
