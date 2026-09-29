@@ -1,3 +1,13 @@
+## 0.0.4 (2026-09-29)
+
+### 🧹 Chores
+
+- Update ai-types package description and remove extraneous dependencies ([b423fcb](https://github.com/MaxiGarcia13/ai/commit/b423fcb))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.3 (2026-09-29)
 
 ### 🔄 Refactors

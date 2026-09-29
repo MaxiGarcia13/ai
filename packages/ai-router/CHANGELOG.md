@@ -1,3 +1,9 @@
+## 0.0.8 (2026-09-29)
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.4
+
 ## 0.0.7 (2026-09-29)
 
 ### 🔄 Refactors
