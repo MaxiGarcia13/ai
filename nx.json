@@ -16,7 +16,7 @@
   },
   "release": {
     "projects": [
-      "packages/ai-gateway"
+      "packages/ai-router"
     ],
     "projectsRelationship": "independent",
     "releaseTag": {
