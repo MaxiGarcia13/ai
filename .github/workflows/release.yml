@@ -41,6 +41,8 @@ jobs:
 
       - name: Bump app version
         run: npm run bump-version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push commit and tags
         run: git push && git push --tags
