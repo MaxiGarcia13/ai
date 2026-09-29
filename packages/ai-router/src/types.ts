@@ -1,4 +1,4 @@
-import type { AiProviderModels, AiProviderName } from './provider.js';
+import type { AiProviderModels, AiProviderName } from '@maxigarcia/ai-types';
 
 interface ProviderEntry<K extends AiProviderName> {
   apiKey: string;

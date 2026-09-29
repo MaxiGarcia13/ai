@@ -1,5 +1,6 @@
-import type { AiProviderName, AiRouterOptions } from '@maxigarcia/ai-types';
+import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
+import type { AiRouterOptions } from '../src/types.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createMock = vi.fn();

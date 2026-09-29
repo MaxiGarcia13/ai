@@ -1,4 +1,5 @@
-import type { AiProviderName, AiRouterOptions } from '@maxigarcia/ai-types';
+import type { AiProviderName } from '@maxigarcia/ai-types';
+import type { AiRouterOptions } from './types.js';
 import { createAiRequest } from './create.js';
 
 export function AiRouter<const TFallback extends Array<AiProviderName>>(
