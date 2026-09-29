@@ -16,10 +16,8 @@ export function createAiRequest(
     options: Omit<ChatCompletionCreateParamsStreaming, 'messages'>,
   ) => {
     const errors: { providerName: AiProviderName; error: unknown }[] = [];
-    const providersOrder = balanceProvidersOrder(
-      lastUsedProvider,
-      uniqueProvider(order),
-    );
+    const providers = uniqueProvider(order);
+    const providersOrder = balanceProvidersOrder(lastUsedProvider, providers);
 
     for (const providerName of providersOrder) {
       const config = providerConfig[providerName];
