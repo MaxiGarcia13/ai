@@ -12,7 +12,7 @@ import type {
   AiProviderModels,
   AiProviderName,
   AiRouterOptions,
-} from "@maxigarcia/ai-types";
+} from '@maxigarcia/ai-types';
 ```
 
 ## Types
@@ -22,7 +22,7 @@ import type {
 Union of supported provider identifiers:
 
 ```ts
-type AiProviderName = "groq" | "open-router" | "gemini";
+type AiProviderName = 'groq' | 'open-router' | 'gemini';
 ```
 
 ### `AiProviderModels`
