@@ -1,3 +1,13 @@
+## 0.0.3 (2026-09-29)
+
+### 🔄 Refactors
+
+- Rename providerConfig to providers and order to fallback in AiRouterOptions for clarity ([b569479](https://github.com/MaxiGarcia13/ai/commit/b569479))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.2 (2026-09-29)
 
 ### 🔄 Refactors
