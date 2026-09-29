@@ -2,17 +2,12 @@
 
 ## What is it for?
 
-Shared TypeScript types for `@maxigarcia/ai-router` and related packages — provider names, models, provider config, and router options.
+Shared TypeScript types for AI provider names and their default models, used by `@maxigarcia/ai-router` and related packages.
 
 ## How to use it?
 
 ```ts
-import type {
-  AiProviderConfig,
-  AiProviderModels,
-  AiProviderName,
-  AiRouterOptions,
-} from '@maxigarcia/ai-types';
+import type { AiProviderModels, AiProviderName } from '@maxigarcia/ai-types';
 ```
 
 ## Types
@@ -34,22 +29,3 @@ Default model per provider:
 | `groq`        | `openai/gpt-oss-120b` |
 | `open-router` | `openrouter/free`     |
 | `gemini`      | `gemini-3.7-flash`    |
-
-### `AiProviderConfig`
-
-Shape used by each provider adapter:
-
-| Member             | Description                                           |
-| ------------------ | ----------------------------------------------------- |
-| `getClientOptions` | Builds OpenAI `ClientOptions` from a base URL         |
-| `getCreateParams`  | Builds streaming chat-completion params for a request |
-
-### `AiRouterOptions`
-
-Options for configuring a multi-provider router:
-
-| Option                   | Description                              |
-| ------------------------ | ---------------------------------------- |
-| `fallback`               | Provider fallback / rotation order       |
-| `providers[name].apiKey` | Required API key for that provider       |
-| `providers[name].model`  | Optional default model for that provider |
