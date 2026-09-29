@@ -1,4 +1,4 @@
-import type { AiProviderName } from './providers/types.js';
+import type { AiProviderName } from '@maxigarcia/ai-types';
 
 export function balanceProvidersOrder(lastUsedProvider: AiProviderName | null, order: AiProviderName[]) {
   if (!lastUsedProvider) {

@@ -1,11 +1,11 @@
 {
-  "name": "@maxigarcia/ai-router",
+  "name": "@maxigarcia/ai-types",
   "type": "module",
-  "version": "0.0.4",
-  "description": "Lightweight, fault-tolerant library that seamlessly routes your AI requests across multiple providers",
+  "version": "0.0.0",
+  "description": "Shared TypeScript types for AI providers, models, and router options",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
-  "homepage": "https://github.com/MaxiGarcia13/ai/blob/main/packages/ai-router/README.md",
+  "homepage": "https://github.com/MaxiGarcia13/ai/blob/main/packages/ai-types/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaxiGarcia13/ai.git"
@@ -32,14 +32,9 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "rm -rf dist node_modules",
-    "test": "vitest run"
+    "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@maxigarcia/ai-types": "*",
     "openai": "^7.23.0"
-  },
-  "devDependencies": {
-    "vitest": "^5.0.2"
   }
 }

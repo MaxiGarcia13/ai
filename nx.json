@@ -16,6 +16,7 @@
   },
   "release": {
     "projects": [
+      "packages/ai-types",
       "packages/ai-router"
     ],
     "projectsRelationship": "independent",

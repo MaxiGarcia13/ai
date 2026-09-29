@@ -1,4 +1,4 @@
-import type { AiProviderConfig } from './types.js';
+import type { AiProviderConfig } from '@maxigarcia/ai-types';
 
 export function getOpenRouterProvider(apiKey: string): AiProviderConfig<'open-router'> {
   return {

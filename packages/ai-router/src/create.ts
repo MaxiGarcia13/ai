@@ -1,6 +1,5 @@
+import type { AiProviderName, AiRouterOptions } from '@maxigarcia/ai-types';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
-import type { AiProviderName } from './providers/types.js';
-import type { AiRouterOptions } from './types.js';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';

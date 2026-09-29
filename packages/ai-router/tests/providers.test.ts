@@ -1,4 +1,4 @@
-import type { AiProviderName } from '../src/providers/types.js';
+import type { AiProviderName } from '@maxigarcia/ai-types';
 import { describe, expect, it } from 'vitest';
 import { getGroqProvider } from '../src/providers/groq.js';
 import { getAiProvider } from '../src/providers/index.js';

@@ -1,4 +1,4 @@
-import type { AiProviderName } from './providers/types.js';
+import type { AiProviderName } from '@maxigarcia/ai-types';
 
 export function uniqueProvider(providers: AiProviderName[]) {
   return [...new Set(providers)];
