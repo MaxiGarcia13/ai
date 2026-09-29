@@ -35,7 +35,7 @@ const options: AiRouterOptions = {
   },
 };
 
-describe('aiClient', () => {
+describe('aiRouter', () => {
   beforeEach(() => {
     createMock.mockReset();
     OpenAIMock.mockClear();
