@@ -6,6 +6,8 @@ Routes chat completion requests across multiple AI providers (`gemini`, `groq`, 
 
 If one provider fails, the next in your `fallback` list is tried automatically. After a successful request, the next call starts from the last used provider so traffic is balanced across them.
 
+It also provides `writeNdjsonStream` to turn the streamed completion into an NDJSON `ReadableStream` for HTTP responses — the format expected by `@maxigarcia/ai-client`.
+
 ## Where to use it?
 
 Use it on the **server** — API routes, backend services, or any server-side code that holds provider API keys. Do not use it in the browser; keys must stay private.
@@ -21,7 +23,7 @@ Use it on the **server** — API routes, backend services, or any server-side co
 ## How to use it?
 
 ```ts
-import { AiRouter } from '@maxigarcia/ai-router';
+import { AiRouter, writeNdjsonStream } from '@maxigarcia/ai-router';
 
 // set up once on the server
 const router = AiRouter({
@@ -58,25 +60,36 @@ export async function POST(request: Request) {
 
 ### `AiRouter` options
 
-| Option                   | Description                              |
-| ------------------------ | ---------------------------------------- |
-| `fallback`               | Provider fallback / rotation order       |
-| `providers[name].apiKey` | Required API key for that provider       |
-| `providers[name].model`  | Optional default model for that provider |
+| Option                   | Description                        |
+| ------------------------ | ---------------------------------- |
+| `fallback`               | Provider fallback / rotation order |
+| `providers[name].apiKey` | Required API key for that provider |
+| `providers[name].model`  | Optional model for that provider   |
 
-### `client.create(messages, options?)`
+### `router.create(messages, options?)`
 
-| Option        | Description                                             |
-| ------------- | ------------------------------------------------------- |
-| `messages`    | Chat messages (first argument)                          |
-| `model`       | Model for this request (falls back to provider default) |
-| `stream`      | Stream the response — defaults to `true`                |
-| `temperature` | Sampling temperature                                    |
-| `max_tokens`  | Maximum tokens to generate                              |
-| `tools`       | Tool / function definitions                             |
+Returns an `AsyncIterable` of chat completion chunks. The model comes from each provider's config — it is not passed per request.
+
+| Option        | Description                              |
+| ------------- | ---------------------------------------- |
+| `messages`    | Chat messages (first argument)           |
+| `stream`      | Stream the response — defaults to `true` |
+| `temperature` | Sampling temperature                     |
+| `max_tokens`  | Maximum tokens to generate               |
+| `tools`       | Tool / function definitions              |
+
+### `writeNdjsonStream(stream)`
+
+Encodes an async iterable of chat completion chunks as NDJSON (`ReadableStream<Uint8Array>`).
+
+- Each chunk is written as one JSON line
+- If the iterable throws, writes a final `{ "error": "<message>" }` line and closes
+
+Pair this with `@maxigarcia/ai-client`'s `readNdjsonStream` / `streamChatCompletion` on the client.
 
 ### Behavior
 
 1. Tries providers in `fallback` (rotated from the last successful one when available).
 2. On failure, moves to the next provider.
-3. If every provider fails, rejects with an array of `{ providerName, error }`.
+3. If every provider fails, rejects with an array of `AiRouterProviderError` (`{ providerName, error }`).
+4. Trims conversation history to the model's context window before each call.

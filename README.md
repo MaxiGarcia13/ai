@@ -11,7 +11,7 @@ Provider outages, rate limits, and quota errors are common. Hard-coding a single
 This monorepo gives you:
 
 - **Server-side routing** — try providers in order, rotate after success, fail over automatically
-- **Browser streaming** — consume NDJSON chat chunks over HTTP without exposing keys
+- **NDJSON HTTP streaming** — `writeNdjsonStream` on the server, `streamChatCompletion` in the browser
 - **Shared types & utils** — consistent provider names, defaults, and context trimming
 
 ```
@@ -24,12 +24,12 @@ This monorepo gives you:
 
 ## Packages
 
-| Package                                         | Role                                                       | Where it runs                |
-| ----------------------------------------------- | ---------------------------------------------------------- | ---------------------------- |
-| [`@maxigarcia/ai-router`](./packages/ai-router) | Routes requests across providers with fallback & balancing | **Server only**              |
-| [`@maxigarcia/ai-client`](./packages/ai-client) | Streams chat completions from your HTTP endpoint           | Browser / any `fetch` client |
-| [`@maxigarcia/ai-types`](./packages/ai-types)   | Shared provider names and default models                   | Server & client              |
-| [`@maxigarcia/ai-utils`](./packages/ai-utils)   | Message/context helpers (e.g. trim to context window)      | Server                       |
+| Package                                         | Role                                                        | Where it runs                |
+| ----------------------------------------------- | ----------------------------------------------------------- | ---------------------------- |
+| [`@maxigarcia/ai-router`](./packages/ai-router) | Routes requests across providers; encodes streams as NDJSON | **Server only**              |
+| [`@maxigarcia/ai-client`](./packages/ai-client) | Streams chat completions from your HTTP endpoint            | Browser / any `fetch` client |
+| [`@maxigarcia/ai-types`](./packages/ai-types)   | Shared provider names and default models                    | Server & client              |
+| [`@maxigarcia/ai-utils`](./packages/ai-utils)   | Message/context helpers (e.g. trim to context window)       | Server                       |
 
 ## How to implement it
 
@@ -78,7 +78,7 @@ const router = AiRouter({
 });
 ```
 
-Expose an endpoint that calls `router.create` and writes each chunk as NDJSON (one JSON object per line). That shape is what `ai-client` expects:
+Expose an endpoint that calls `router.create` and pipes the result through `writeNdjsonStream`. That NDJSON body is what `ai-client` expects:
 
 ```ts
 // Example: Node / Edge-style handler sketch
@@ -101,8 +101,11 @@ export async function POST(request: Request) {
 
 1. Tries providers in `fallback` order, rotated from the last successful provider when available
 2. On failure, moves to the next provider
-3. If every provider fails, rejects with an array of `{ providerName, error }`
+3. If every provider fails, rejects with an array of `AiRouterProviderError` (`{ providerName, error }`)
 4. Trims conversation history to the model's context window before each call
+5. Uses each provider's configured model (set on `providers[name].model`, not per request)
+
+`writeNdjsonStream` encodes each chunk as one JSON line. If the provider stream throws mid-flight, it writes a final `{ "error": "<message>" }` line and closes — matching what `ai-client` reads.
 
 More detail: [`packages/ai-router/README.md`](./packages/ai-router/README.md)
 
