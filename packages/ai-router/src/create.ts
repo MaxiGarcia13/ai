@@ -14,7 +14,7 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
 ) {
   return async (
     messages: ChatCompletionMessageParam[],
-    options: Omit<ChatCompletionCreateParamsStreaming, 'messages'>,
+    options: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'>,
   ) => {
     const errors: { providerName: AiProviderName; error: unknown }[] = [];
     const providerNames = uniqueProvider(fallback);
@@ -38,8 +38,10 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
       try {
         const client = new OpenAI(provider.getClientOptions(config.apiKey));
         const baseParams = provider.getCreateParams({ messages, model: config.model });
-        const model = options.model ?? baseParams.model;
+        const model = baseParams.model;
+
         const limits = provider.getModelLimits(model);
+
         const maxOutputTokens = options.max_completion_tokens
           ?? options.max_tokens
           ?? limits.maxOutputTokens;
