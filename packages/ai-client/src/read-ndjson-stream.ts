@@ -1,5 +1,4 @@
 import type { ChatCompletionChunk } from 'openai/resources.js';
-import { AiClientError } from './ai-client-error.js';
 
 export async function* readNdjsonStream(
   body: ReadableStream<Uint8Array>,
@@ -47,7 +46,7 @@ function parseLlmStreamLine(line: string): ChatCompletionChunk {
   if ('error' in parsed && parsed.error) {
     const error = parsed.error;
     const message = typeof error === 'string' ? error : error.message ?? 'Request failed';
-    throw new AiClientError(message);
+    throw new Error(message);
   }
 
   return parsed as ChatCompletionChunk;

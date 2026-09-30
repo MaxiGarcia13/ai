@@ -1,5 +1,5 @@
+import { HttpError } from '@maxigarcia/ai-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { AiClientError } from '../src/ai-client-error.js';
 import { streamChatCompletion } from '../src/stream-chat-completion.js';
 
 const messages = [{ role: 'user' as const, content: 'hello' }];
@@ -66,7 +66,7 @@ describe('streamChatCompletion', () => {
     await expect(
       streamChatCompletion('https://example.com/chat', { body: requestBody }),
     ).rejects.toSatisfy((error: unknown) => {
-      expect(error).toBeInstanceOf(AiClientError);
+      expect(error).toBeInstanceOf(HttpError);
       expect(error).toMatchObject({ message: 'quota exceeded', status: 429 });
       return true;
     });
@@ -86,7 +86,7 @@ describe('streamChatCompletion', () => {
     await expect(
       streamChatCompletion('https://example.com/chat', { body: requestBody }),
     ).rejects.toSatisfy((error: unknown) => {
-      expect(error).toBeInstanceOf(AiClientError);
+      expect(error).toBeInstanceOf(HttpError);
       expect(error).toMatchObject({
         message: 'Request failed: 500',
         status: 500,
@@ -106,7 +106,7 @@ describe('streamChatCompletion', () => {
     await expect(
       streamChatCompletion('https://example.com/chat', { body: requestBody }),
     ).rejects.toSatisfy((error: unknown) => {
-      expect(error).toBeInstanceOf(AiClientError);
+      expect(error).toBeInstanceOf(HttpError);
       expect(error).toMatchObject({
         message: 'Response has no body',
         status: 200,

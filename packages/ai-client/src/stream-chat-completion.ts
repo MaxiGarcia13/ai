@@ -1,5 +1,5 @@
 import type { ChatCompletionCreateParamsStreaming } from 'openai/resources.js';
-import { AiClientError } from './ai-client-error.js';
+import { HttpError } from '@maxigarcia/ai-utils';
 import { readNdjsonStream } from './read-ndjson-stream.js';
 
 type BaseBody = Pick<ChatCompletionCreateParamsStreaming, 'messages'>;
@@ -40,11 +40,11 @@ export async function streamChatCompletion<Tbody extends BaseBody>(
       // Keep the status fallback when the body is not JSON.
     }
 
-    throw new AiClientError(message, response.status);
+    throw new HttpError(message, response.status);
   }
 
   if (!response.body) {
-    throw new AiClientError('Response has no body', response.status);
+    throw new HttpError('Response has no body', response.status);
   }
 
   return readNdjsonStream(response.body);

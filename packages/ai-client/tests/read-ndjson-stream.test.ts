@@ -1,6 +1,5 @@
 import type { ChatCompletionChunk } from 'openai/resources.js';
 import { describe, expect, it } from 'vitest';
-import { AiClientError } from '../src/ai-client-error.js';
 import { readNdjsonStream } from '../src/read-ndjson-stream.js';
 
 function streamFrom(chunks: string[]): ReadableStream<Uint8Array> {
@@ -66,7 +65,7 @@ describe('readNdjsonStream', () => {
     const body = streamFrom([`${JSON.stringify({ error: 'provider down' })}\n`]);
 
     await expect(collect(body)).rejects.toSatisfy((error: unknown) => {
-      expect(error).toBeInstanceOf(AiClientError);
+      expect(error).toBeInstanceOf(Error);
       expect(error).toMatchObject({ message: 'provider down' });
       return true;
     });
@@ -78,7 +77,7 @@ describe('readNdjsonStream', () => {
     ]);
 
     await expect(collect(body)).rejects.toSatisfy((error: unknown) => {
-      expect(error).toBeInstanceOf(AiClientError);
+      expect(error).toBeInstanceOf(Error);
       expect(error).toMatchObject({ message: 'rate limited' });
       return true;
     });
@@ -88,7 +87,7 @@ describe('readNdjsonStream', () => {
     const body = streamFrom([`${JSON.stringify({ error: {} })}\n`]);
 
     await expect(collect(body)).rejects.toSatisfy((error: unknown) => {
-      expect(error).toBeInstanceOf(AiClientError);
+      expect(error).toBeInstanceOf(Error);
       expect(error).toMatchObject({ message: 'Request failed' });
       return true;
     });
