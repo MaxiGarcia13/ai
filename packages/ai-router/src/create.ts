@@ -14,7 +14,7 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
 ) {
   return async (
     messages: ChatCompletionMessageParam[],
-    options: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'>,
+    options?: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'>,
   ) => {
     const errors: { providerName: AiProviderName; error: unknown }[] = [];
     const providerNames = uniqueProvider(fallback);
@@ -42,8 +42,8 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
 
         const limits = provider.getModelLimits(model);
 
-        const maxOutputTokens = options.max_completion_tokens
-          ?? options.max_tokens
+        const maxOutputTokens = options?.max_completion_tokens
+          ?? options?.max_tokens
           ?? limits.maxOutputTokens;
         const trimmedMessages = trimMessagesForModel(
           messages,
