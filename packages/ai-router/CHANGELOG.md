@@ -1,3 +1,19 @@
+## 0.0.12 (2026-09-30)
+
+### 🚀 Features
+
+- Update writeNdjsonStream to accept AsyncIterable of ChatCompletionChunk ([53e2b52](https://github.com/MaxiGarcia13/ai/commit/53e2b52))
+- Enhance POST handler in README with NDJSON response example ([11df7c8](https://github.com/MaxiGarcia13/ai/commit/11df7c8))
+
+### 🧪 Tests
+
+- Update type assertions in NDJSON stream tests ([6022a7e](https://github.com/MaxiGarcia13/ai/commit/6022a7e))
+- Add unit tests for NDJSON streaming functionality in ai-router ([ac834df](https://github.com/MaxiGarcia13/ai/commit/ac834df))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.11 (2026-09-30)
 
 ### 🚀 Features
