@@ -1,3 +1,13 @@
+## 0.2.0 (2026-09-30)
+
+### 🚀 Features
+
+- Add README for @maxigarcia/ai-client with usage instructions and error handling details ([f674359](https://github.com/MaxiGarcia13/ai/commit/f674359))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.0 (2026-09-30)
 
 ### 🔄 Refactors
