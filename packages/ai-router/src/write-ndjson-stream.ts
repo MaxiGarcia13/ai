@@ -1,4 +1,6 @@
-export function writeNdjsonStream(stream: ReadableStream<Uint8Array>) {
+import type { ChatCompletionChunk } from 'openai/resources';
+
+export function writeNdjsonStream(stream: AsyncIterable<ChatCompletionChunk>) {
   return new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
