@@ -44,7 +44,8 @@
     },
     "version": {
       "conventionalCommits": true,
-      "preVersionCommand": "npm run build"
+      "preVersionCommand": "npm run build",
+      "adjustSemverBumpsForZeroMajorVersion": false
     },
     "changelog": {
       "workspaceChangelog": false,
