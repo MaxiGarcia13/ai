@@ -1,7 +1,7 @@
 {
   "name": "@maxigarcia/ai-types",
   "type": "module",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Shared TypeScript types for AI provider names and default models",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",

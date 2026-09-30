@@ -1,7 +1,7 @@
 {
   "name": "@maxigarcia/ai-utils",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Shared utilities for AI message handling and context management",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",

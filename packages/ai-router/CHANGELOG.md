@@ -1,3 +1,18 @@
+## 0.0.14 (2026-09-30)
+
+### 📚 Documentation
+
+- Update README and ai-router documentation for NDJSON streaming ([59fe135](https://github.com/MaxiGarcia13/ai/commit/59fe135))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.6
+- Updated @maxigarcia/ai-utils to 0.0.2
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.13 (2026-09-30)
 
 ### 🚀 Features
