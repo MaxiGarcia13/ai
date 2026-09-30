@@ -1,3 +1,17 @@
+## 0.0.11 (2026-09-30)
+
+### 🚀 Features
+
+- Update createAiRequest to include model in options ([c03a88e](https://github.com/MaxiGarcia13/ai/commit/c03a88e))
+
+### 🐞 Fixes
+
+- Make options parameter optional in createAiRequest function ([c3feab7](https://github.com/MaxiGarcia13/ai/commit/c3feab7))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.10 (2026-09-30)
 
 ### 🚀 Features

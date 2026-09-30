@@ -1,7 +1,7 @@
 {
   "name": "@maxigarcia/ai-router",
   "type": "module",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Lightweight, fault-tolerant library that seamlessly routes your AI requests across multiple providers",
   "author": "Maximiliano Garcia Mortigliengo",
   "license": "ISC",
