@@ -22,8 +22,8 @@ async function* asAsyncIterable(
   }
 }
 
-async function readText(stream: ReadableStream<Uint8Array>): Promise<string> {
-  return new Response(stream).text();
+async function readText(body: BodyInit): Promise<string> {
+  return new Response(body).text();
 }
 
 describe('writeNdjsonStream', () => {

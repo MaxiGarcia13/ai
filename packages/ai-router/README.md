@@ -80,7 +80,7 @@ Returns an `AsyncIterable` of chat completion chunks. The model comes from each 
 
 ### `writeNdjsonStream(stream)`
 
-Encodes an async iterable of chat completion chunks as NDJSON (`ReadableStream<Uint8Array>`).
+Encodes an async iterable of chat completion chunks as NDJSON. Returns a `BodyInit` suitable for `new Response(body)`.
 
 - Each chunk is written as one JSON line
 - If the iterable throws, writes a final `{ "error": "<message>" }` line and closes
