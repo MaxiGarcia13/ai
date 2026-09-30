@@ -1,4 +1,4 @@
-import { HttpError } from './http-error.js';
+import { HttpError, isHttpError } from './http-error.js';
 
 export class AiError extends HttpError {
   readonly status?: number;
@@ -11,4 +11,8 @@ export class AiError extends HttpError {
     this.status = status;
     this.providerName = providerName;
   }
+}
+
+export function isAiErrorArray(error: unknown): error is AiError[] {
+  return Array.isArray(error) && error.every((item) => item instanceof AiError || isHttpError(item));
 }

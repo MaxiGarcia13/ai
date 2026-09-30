@@ -9,7 +9,6 @@ export class HttpError extends Error {
 }
 
 export function isHttpError(error: unknown): error is HttpError {
-  return typeof error === 'object'
-    && error !== null
-    && 'status' in error;
+  return error instanceof HttpError
+    || (error !== null && typeof error === 'object' && 'status' in error);
 }

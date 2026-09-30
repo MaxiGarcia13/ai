@@ -24,6 +24,7 @@ Use it on the **server** — API routes, backend services, or any server-side co
 
 ```ts
 import { AiRouter, writeNdjsonStream } from '@maxigarcia/ai-router';
+import { isAiErrorArray } from '@maxigarcia/ai-utils';
 
 // set up once on the server
 const router = AiRouter({
@@ -46,9 +47,8 @@ const router = AiRouter({
 export async function POST(request: Request) {
   const { messages } = await request.json();
 
-  const stream = await router.create(messages);
-
-  if (!Array.isArray(stream)) {
+  try {
+    const stream = await router.create(messages);
     const body = writeNdjsonStream(stream);
 
     return new Response(body, {
@@ -57,8 +57,23 @@ export async function POST(request: Request) {
         'Cache-Control': 'no-cache',
       },
     });
-  } else {
-    // handle the error
+  } catch (error) {
+    // Every provider failed — rejection value is AiError[]
+    if (isAiErrorArray(error)) {
+      return Response.json(
+        {
+          error: 'All providers failed',
+          providers: error.map((e) => ({
+            providerName: e.providerName,
+            status: e.status,
+            message: e.message,
+          })),
+        },
+        { status: 502 },
+      );
+    }
+
+    throw error;
   }
 }
 ```
@@ -73,7 +88,9 @@ export async function POST(request: Request) {
 
 ### `router.create(messages, options?)`
 
-Returns an `AsyncIterable` of chat completion chunks. The model comes from each provider's config — it is not passed per request.
+On success, resolves to an `AsyncIterable` of chat completion chunks. The model comes from each provider's config — it is not passed per request.
+
+On total failure, **rejects with `AiError[]`** (see [Errors](#errors)).
 
 | Option        | Description                              |
 | ------------- | ---------------------------------------- |
@@ -95,6 +112,31 @@ Pair this with `@maxigarcia/ai-client`'s `readNdjsonStream` / `streamChatComplet
 ### Behavior
 
 1. Tries providers in `fallback` (rotated from the last successful one when available).
-2. On failure, moves to the next provider.
-3. If every provider fails, rejects with an array of `AiRouterProviderError` (`{ providerName, error }`).
+2. On HTTP-style failures (`isHttpError`), wraps each as `AiError` and moves to the next provider.
+3. If every provider fails, rejects with `AiError[]`.
 4. Trims conversation history to the model's context window before each call.
+
+### Errors
+
+Provider SDK errors that look like HTTP failures (`isHttpError` — objects with a `status` field) are collected as `AiError` from `@maxigarcia/ai-utils`:
+
+| Field          | Description                                      |
+| -------------- | ------------------------------------------------ |
+| `message`      | Error message from the provider                  |
+| `status`       | Optional HTTP status (e.g. `429`, `500`)         |
+| `providerName` | Which provider failed (`groq`, `open-router`, …) |
+
+When **all** providers fail, `router.create` rejects with that array:
+
+```ts
+try {
+  const stream = await router.create(messages);
+  // stream success…
+} catch (error) {
+  if (isAiErrorArray(error)) {
+    // e.g. error[0].providerName, error[0].status, error[0].message
+  }
+}
+```
+
+Use the first error’s `status` (or `502`) for your HTTP response, and optionally expose the full list for debugging. Non-HTTP failures (missing API key, unknown provider) still throw a normal `Error`.

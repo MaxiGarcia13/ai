@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AiError } from '../src/ai-error.js';
+import { AiError, isAiErrorArray } from '../src/ai-error.js';
 
 describe('http-error', () => {
   it('sets name, message, and optional status', () => {
@@ -18,5 +18,19 @@ describe('http-error', () => {
 
     expect(error.message).toBe('stream failed');
     expect(error.status).toBeUndefined();
+  });
+});
+
+describe('isAiErrorArray', () => {
+  it('returns true when the error is an array of AiErrors', () => {
+    const error = new AiError('something went wrong', 502, 'provider');
+
+    const errors = [error, error];
+    expect(isAiErrorArray(errors)).toBe(true);
+  });
+
+  it('returns false when the error is not an array of AiErrors', () => {
+    const error = new Error('something went wrong');
+    expect(isAiErrorArray(error)).toBe(false);
   });
 });

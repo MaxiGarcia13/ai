@@ -29,7 +29,7 @@ This monorepo gives you:
 | [`@maxigarcia/ai-router`](./packages/ai-router) | Routes requests across providers; encodes streams as NDJSON | **Server only**              |
 | [`@maxigarcia/ai-client`](./packages/ai-client) | Streams chat completions from your HTTP endpoint            | Browser / any `fetch` client |
 | [`@maxigarcia/ai-types`](./packages/ai-types)   | Shared provider names and default models                    | Server & client              |
-| [`@maxigarcia/ai-utils`](./packages/ai-utils)   | Message/context helpers (e.g. trim to context window)       | Server                       |
+| [`@maxigarcia/ai-utils`](./packages/ai-utils)   | Shared helpers: context trimming, `HttpError`, `AiError`    | Server & client              |
 
 ## How to implement it
 
@@ -81,13 +81,14 @@ const router = AiRouter({
 Expose an endpoint that calls `router.create` and pipes the result through `writeNdjsonStream`. That NDJSON body is what `ai-client` expects:
 
 ```ts
+import { isAiErrorArray } from '@maxigarcia/ai-utils';
+
 // Example: Node / Edge-style handler sketch
 export async function POST(request: Request) {
   const { messages } = await request.json();
 
-  const stream = await router.create(messages);
-
-  if (!Array.isArray(stream)) {
+  try {
+    const stream = await router.create(messages);
     const body = writeNdjsonStream(stream);
 
     return new Response(body, {
@@ -96,8 +97,23 @@ export async function POST(request: Request) {
         'Cache-Control': 'no-cache',
       },
     });
-  } else {
-    // handle the error
+  } catch (error) {
+    // Every provider failed — rejection value is AiError[]
+    if (isAiErrorArray(error)) {
+      return Response.json(
+        {
+          error: 'All providers failed',
+          providers: error.map((e) => ({
+            providerName: e.providerName,
+            status: e.status,
+            message: e.message,
+          })),
+        },
+        { status: 502 },
+      );
+    }
+
+    throw error;
   }
 }
 ```
@@ -105,8 +121,8 @@ export async function POST(request: Request) {
 **What the router does**
 
 1. Tries providers in `fallback` order, rotated from the last successful provider when available
-2. On failure, moves to the next provider
-3. If every provider fails, rejects with an array of `AiRouterProviderError` (`{ providerName, error }`)
+2. On HTTP-style failures (`isHttpError`), wraps each as `AiError` (message, status, providerName) and moves to the next provider
+3. If every provider fails, **rejects** with `AiError[]` — one entry per failed provider
 4. Trims conversation history to the model's context window before each call
 5. Uses each provider's configured model (set on `providers[name].model`, not per request)
 
@@ -125,7 +141,8 @@ npm install @maxigarcia/ai-client
 Call your endpoint from the browser (or any environment with `fetch`). The client POSTs `{ messages }` as JSON and yields OpenAI-style chat completion chunks from the NDJSON body:
 
 ```ts
-import { AiClientError, streamChatCompletion } from '@maxigarcia/ai-client';
+import { streamChatCompletion } from '@maxigarcia/ai-client';
+import { HttpError, isHttpError } from '@maxigarcia/ai-utils';
 
 try {
   const stream = await streamChatCompletion('/api/chat', {
@@ -141,7 +158,8 @@ try {
     }
   }
 } catch (error) {
-  if (error instanceof AiClientError) {
+  if (isHttpError(error)) {
+    // Non-OK HTTP response from your API (e.g. all providers failed)
     console.error(error.message, error.status);
   }
   throw error;
@@ -151,8 +169,21 @@ try {
 `streamChatCompletion`:
 
 - Sends a `POST` with `Content-Type: application/json` and body `{ messages }`
-- Throws `AiClientError` on non-OK responses (uses `error` from JSON when present)
+- Throws `HttpError` on non-OK responses (uses `error` from JSON when present) or when the response has no body
 - Parses each NDJSON line as a chat completion chunk (or throws if a line contains `{ error }`)
+
+### Errors
+
+| Class / helper   | Package                | When                                                            |
+| ---------------- | ---------------------- | --------------------------------------------------------------- |
+| `HttpError`      | `@maxigarcia/ai-utils` | HTTP-level failure (`message`, optional `status`)               |
+| `isHttpError`    | `@maxigarcia/ai-utils` | Type guard for objects with a `status` field (incl. SDK errors) |
+| `AiError`        | `@maxigarcia/ai-utils` | Extends `HttpError` with optional `providerName`                |
+| `isAiErrorArray` | `@maxigarcia/ai-utils` | Type guard for `AiError[]` (all-providers-failed rejection)     |
+
+**Server (`router.create`)** — per-provider HTTP failures become `AiError`s. When none succeed, the promise **rejects with `AiError[]`**. Catch it, check with `isAiErrorArray(error)`, and map status/message back to your HTTP response.
+
+**Client (`streamChatCompletion`)** — non-OK responses throw a single `HttpError` with the status and message from your API.
 
 ## Development
 
