@@ -1,3 +1,18 @@
+## 0.1.0 (2026-09-30)
+
+### 🔄 Refactors
+
+- Enhance error handling in AI router and client ([e618061](https://github.com/MaxiGarcia13/ai/commit/e618061))
+- Remove AiClientError class and replace with HttpError for improved error handling ([abd43e6](https://github.com/MaxiGarcia13/ai/commit/abd43e6))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-utils to 0.1.0
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.3 (2026-09-30)
 
 ### 🔄 Refactors

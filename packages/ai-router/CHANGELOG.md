@@ -1,3 +1,22 @@
+## 0.1.0 (2026-09-30)
+
+### 🔄 Refactors
+
+- Enhance error handling in AI router and client ([e618061](https://github.com/MaxiGarcia13/ai/commit/e618061))
+- Replace AiRouterProviderError with AiError for improved error handling ([aed000e](https://github.com/MaxiGarcia13/ai/commit/aed000e))
+
+### 🧪 Tests
+
+- Add test for handling multiple provider errors in NDJSON stream ([feba98a](https://github.com/MaxiGarcia13/ai/commit/feba98a))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-utils to 0.1.0
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.16 (2026-09-30)
 
 ### 🐞 Fixes
