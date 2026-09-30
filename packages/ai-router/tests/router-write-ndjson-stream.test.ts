@@ -1,6 +1,7 @@
 import type { ChatCompletionChunk } from 'openai/resources';
 import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import type { AiRouterOptions } from '../src/types.js';
+import { AiError } from '@maxigarcia/ai-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createMock = vi.fn();
@@ -110,5 +111,21 @@ describe('aiRouter + writeNdjsonStream', () => {
     await expect(readText(body)).resolves.toBe(
       `${JSON.stringify(chunkA)}\n${JSON.stringify({ error: 'stream interrupted' })}\n`,
     );
+  });
+
+  it('rejects with all provider errors when every create fails', async () => {
+    const groqError = { status: 429, message: 'groq failed' };
+    const openRouterError = { status: 500, message: 'open-router failed' };
+
+    createMock
+      .mockRejectedValueOnce(groqError)
+      .mockRejectedValueOnce(openRouterError);
+
+    const router = AiRouter(options);
+
+    await expect(router.create(messages)).rejects.toEqual([
+      new AiError(groqError.message, groqError.status, 'groq'),
+      new AiError(openRouterError.message, openRouterError.status, 'open-router'),
+    ]);
   });
 });
