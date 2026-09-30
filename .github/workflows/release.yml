@@ -39,7 +39,7 @@ jobs:
       - name: Configure git author
         uses: MaxiGarcia13/gh-actions/.github/actions/configure-git-author@main
 
-      - name: Bump app version
+      - name: Bump package version
         run: npm run bump-version
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
