@@ -1,3 +1,13 @@
+## 0.0.13 (2026-09-30)
+
+### 🚀 Features
+
+- Enhance createAiRequest with error handling and type updates ([1c53d7a](https://github.com/MaxiGarcia13/ai/commit/1c53d7a))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.12 (2026-09-30)
 
 ### 🚀 Features
