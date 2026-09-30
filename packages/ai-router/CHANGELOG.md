@@ -1,3 +1,13 @@
+## 0.0.16 (2026-09-30)
+
+### 🐞 Fixes
+
+- Enhance error handling in POST request for NDJSON streaming ([3476b5e](https://github.com/MaxiGarcia13/ai/commit/3476b5e))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.15 (2026-09-30)
 
 ### 🐞 Fixes
