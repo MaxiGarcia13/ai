@@ -13,8 +13,3 @@ export interface AiRouterOptions<
     [K in TFallback[number]]: ProviderEntry<K>;
   };
 }
-
-export interface AiRouterProviderError {
-  providerName: AiProviderName;
-  error: unknown;
-}

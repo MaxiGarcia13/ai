@@ -1,6 +1,7 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionChunk, ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
-import type { AiRouterOptions, AiRouterProviderError } from './types.js';
+import type { AiRouterOptions } from './types.js';
+import { AiError, isHttpError } from '@maxigarcia/ai-utils';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
@@ -15,8 +16,8 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
   return async (
     messages: ChatCompletionMessageParam[],
     options?: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'>,
-  ): Promise<AsyncIterable<ChatCompletionChunk> | Array<AiRouterProviderError>> => {
-    const errors: Array<AiRouterProviderError> = [];
+  ): Promise<AsyncIterable<ChatCompletionChunk> | Array<AiError>> => {
+    const errors: Array<AiError> = [];
     const providerNames = uniqueProvider(fallback);
     const providersOrder = balanceProvidersOrder(lastUsedProvider, providerNames);
 
@@ -64,7 +65,10 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
 
         return response;
       } catch (error) {
-        errors.push({ providerName, error });
+        if (isHttpError(error)) {
+          errors.push(new AiError(error.message, error.status, providerName));
+        }
+
         continue;
       }
     }

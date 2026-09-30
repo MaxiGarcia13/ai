@@ -1,6 +1,7 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
-import type { AiRouterOptions, AiRouterProviderError } from '../src/types.js';
+import type { AiRouterOptions } from '../src/types.js';
+import { AiError } from '@maxigarcia/ai-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createMock = vi.fn();
@@ -102,16 +103,17 @@ describe('createAiRequest', () => {
   });
 
   it('rejects with all provider errors when every create fails', async () => {
-    const groqError = new Error('groq failed');
-    const openRouterError = new Error('open-router failed');
+    const groqError = { status: 429, message: 'groq failed' };
+    const openRouterError = { status: 500, message: 'open-router failed' };
+
     createMock.mockRejectedValueOnce(groqError).mockRejectedValueOnce(openRouterError);
     const setLastUsedProvider = vi.fn();
 
     const create = createAiRequest(baseOptions, null, setLastUsedProvider);
 
-    const expectedErrors: AiRouterProviderError[] = [
-      { providerName: 'groq', error: groqError },
-      { providerName: 'open-router', error: openRouterError },
+    const expectedErrors: AiError[] = [
+      new AiError(groqError.message, groqError.status, 'groq'),
+      new AiError(openRouterError.message, openRouterError.status, 'open-router'),
     ];
 
     await expect(create(messages, callerOptions)).rejects.toEqual(expectedErrors);
