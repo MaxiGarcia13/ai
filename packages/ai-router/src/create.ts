@@ -15,7 +15,7 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
   return async (
     messages: ChatCompletionMessageParam[],
     options?: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'>,
-  ): Promise<AsyncIterable<ChatCompletionChunk>> => {
+  ): Promise<AsyncIterable<ChatCompletionChunk> | Array<AiRouterProviderError>> => {
     const errors: Array<AiRouterProviderError> = [];
     const providerNames = uniqueProvider(fallback);
     const providersOrder = balanceProvidersOrder(lastUsedProvider, providerNames);

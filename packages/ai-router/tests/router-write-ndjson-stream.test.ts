@@ -67,7 +67,7 @@ describe('aiRouter + writeNdjsonStream', () => {
 
     const router = AiRouter(options);
     const stream = await router.create(messages);
-    const body = writeNdjsonStream(stream);
+    const body = writeNdjsonStream(stream as AsyncIterable<ChatCompletionChunk>);
 
     await expect(readText(body)).resolves.toBe(
       `${JSON.stringify(chunkA)}\n${JSON.stringify(chunkB)}\n`,
@@ -85,7 +85,7 @@ describe('aiRouter + writeNdjsonStream', () => {
 
     const router = AiRouter(options);
     const stream = await router.create(messages);
-    const body = writeNdjsonStream(stream);
+    const body = writeNdjsonStream(stream as AsyncIterable<ChatCompletionChunk>);
 
     await expect(readText(body)).resolves.toBe(`${JSON.stringify(chunkA)}\n`);
     expect(OpenAIMock).toHaveBeenCalledTimes(2);
@@ -105,7 +105,7 @@ describe('aiRouter + writeNdjsonStream', () => {
 
     const router = AiRouter(options);
     const stream = await router.create(messages);
-    const body = writeNdjsonStream(stream);
+    const body = writeNdjsonStream(stream as AsyncIterable<ChatCompletionChunk>);
 
     await expect(readText(body)).resolves.toBe(
       `${JSON.stringify(chunkA)}\n${JSON.stringify({ error: 'stream interrupted' })}\n`,
