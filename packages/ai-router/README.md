@@ -40,15 +40,19 @@ const router = AiRouter({
   },
 });
 
-// call from your endpoint handler
-const messages = [{ role: 'user' as const, content: 'Summarize this PR diff' }];
+// Example: Node / Edge-style handler sketch
+export async function POST(request: Request) {
+  const { messages } = await request.json();
 
-const stream = await router.create(messages);
+  const stream = await router.create(messages);
+  const body = writeNdjsonStream(stream);
 
-for await (const chunk of stream) {
-  const text = chunk.choices[0]?.delta?.content;
-  if (text)
-    process.stdout.write(text);
+  return new Response(body, {
+    headers: {
+      'Content-Type': 'application/x-ndjson',
+      'Cache-Control': 'no-cache',
+    },
+  });
 }
 ```
 
