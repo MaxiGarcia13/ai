@@ -1,35 +1,11 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
 import type { AiRouterOptions } from './types.js';
-import { trimMessagesToContext } from '@maxigarcia/ai-utils';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
 import { getAiProvider } from './providers/index.js';
+import { trimMessagesForModel } from './trim-messages-for-model.js';
 import { uniqueProvider } from './unique-provider.js';
-
-function getMessageContent(message: ChatCompletionMessageParam): string {
-  return typeof message.content === 'string' ? message.content : '';
-}
-
-function trimMessagesForModel(
-  messages: ChatCompletionMessageParam[],
-  contextWindowSize: number,
-  maxOutputTokens: number,
-): ChatCompletionMessageParam[] {
-  const systemMessages = messages.filter((message) => message.role === 'system');
-  const conversationMessages = messages.filter((message) => message.role !== 'system');
-  const systemPrompt = systemMessages.map(getMessageContent).join('\n');
-
-  return [
-    ...systemMessages,
-    ...trimMessagesToContext({
-      messages: conversationMessages,
-      systemPrompt,
-      contextWindowSize,
-      maxOutputTokens,
-    }),
-  ];
-}
 
 export function createAiRequest<const TFallback extends Array<AiProviderName>>(
   { fallback, providers }: AiRouterOptions<TFallback>,
