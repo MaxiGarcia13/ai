@@ -1,3 +1,17 @@
+## 0.0.15 (2026-09-30)
+
+### 🐞 Fixes
+
+- Update createAiRequest return type and adjust NDJSON stream tests ([c7ed2a6](https://github.com/MaxiGarcia13/ai/commit/c7ed2a6))
+
+### 🔄 Refactors
+
+- Update writeNdjsonStream function signature and README documentation ([c861419](https://github.com/MaxiGarcia13/ai/commit/c861419))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.14 (2026-09-30)
 
 ### 📚 Documentation
