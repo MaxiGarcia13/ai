@@ -6,13 +6,13 @@ const chunkA = {
   id: 'chunk-a',
   object: 'chat.completion.chunk',
   choices: [],
-} as ChatCompletionChunk;
+} as unknown as ChatCompletionChunk;
 
 const chunkB = {
   id: 'chunk-b',
   object: 'chat.completion.chunk',
   choices: [],
-} as ChatCompletionChunk;
+} as unknown as ChatCompletionChunk;
 
 async function* asAsyncIterable(
   chunks: ChatCompletionChunk[],
@@ -56,6 +56,7 @@ describe('writeNdjsonStream', () => {
 
   it('uses a default message when the iterable throws a non-Error', async () => {
     async function* failing(): AsyncIterable<ChatCompletionChunk> {
+      // eslint-disable-next-line no-throw-literal
       throw 'boom';
     }
 
