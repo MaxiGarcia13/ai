@@ -1,3 +1,13 @@
+## 0.0.3 (2026-09-30)
+
+### 🔄 Refactors
+
+- Update streamChatCompletion function to improve type safety and request structure ([faaf056](https://github.com/MaxiGarcia13/ai/commit/faaf056))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.2 (2026-09-30)
 
 This was a version bump only for @maxigarcia/ai-client to align it with other projects, there were no code changes.
