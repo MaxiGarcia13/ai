@@ -1,3 +1,14 @@
+## 0.0.10 (2026-09-30)
+
+### 🚀 Features
+
+- Add README and implement NDJSON stream writing functionality ([5693d7a](https://github.com/MaxiGarcia13/ai/commit/5693d7a))
+- Add trimMessagesForModel function for message context management ([9d0f592](https://github.com/MaxiGarcia13/ai/commit/9d0f592))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.0.9 (2026-09-29)
 
 ### 🚀 Features
