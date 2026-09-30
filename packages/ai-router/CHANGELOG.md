@@ -1,3 +1,18 @@
+## 0.1.1 (2026-09-30)
+
+### 🔄 Refactors
+
+- Update AiRouter and types for improved structure and type safety ([871d70f](https://github.com/MaxiGarcia13/ai/commit/871d70f))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.7
+- Updated @maxigarcia/ai-utils to 0.1.1
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.0 (2026-09-30)
 
 ### 🔄 Refactors
