@@ -2,20 +2,24 @@ import type { ChatCompletionCreateParamsStreaming } from 'openai/resources.js';
 import { AiClientError } from './ai-client-error.js';
 import { readNdjsonStream } from './read-ndjson-stream.js';
 
-interface ChatCompletionStreamOptions extends
-  RequestInit,
-  ChatCompletionCreateParamsStreaming {
+type BaseBody = Pick<ChatCompletionCreateParamsStreaming, 'messages'>;
+type DefaultBody = Omit<ChatCompletionCreateParamsStreaming, 'model'>;
+
+interface ChatCompletionStreamOptions<Tbody extends BaseBody = DefaultBody> extends
+  Omit<RequestInit, 'body' | 'headers'> {
+  body: Tbody;
+  headers?: Record<string, string>;
 }
 
-export async function streamChatCompletion(
+export async function streamChatCompletion<Tbody extends BaseBody>(
   url: string,
-  options: ChatCompletionStreamOptions,
+  options: ChatCompletionStreamOptions<Tbody>,
 ) {
   const response = await fetch(url, {
     method: 'POST',
     ...options,
     body: JSON.stringify({
-      messages: options.messages,
+      ...options.body,
     }),
     headers: {
       'Content-Type': 'application/json',

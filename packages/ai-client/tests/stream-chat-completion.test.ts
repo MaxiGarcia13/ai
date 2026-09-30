@@ -1,14 +1,12 @@
-import type { ChatCompletionCreateParamsStreaming } from 'openai/resources.js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AiClientError } from '../src/ai-client-error.js';
 import { streamChatCompletion } from '../src/stream-chat-completion.js';
 
 const messages = [{ role: 'user' as const, content: 'hello' }];
-const streamOptions = {
+const requestBody = {
   messages,
-  model: 'test-model',
-  stream: true,
-} as ChatCompletionCreateParamsStreaming;
+  stream: true as const,
+};
 
 function ndjsonBody(chunks: object[]): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder();
@@ -36,7 +34,7 @@ describe('streamChatCompletion', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const stream = await streamChatCompletion('https://example.com/chat', {
-      ...streamOptions,
+      body: requestBody,
       headers: { Authorization: 'Bearer token' },
     });
 
@@ -48,12 +46,11 @@ describe('streamChatCompletion', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith('https://example.com/chat', {
       method: 'POST',
-      ...streamOptions,
+      body: JSON.stringify(requestBody),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer token',
       },
-      body: JSON.stringify({ messages }),
     });
     expect(received).toEqual([chunk]);
   });
@@ -67,7 +64,7 @@ describe('streamChatCompletion', () => {
     );
 
     await expect(
-      streamChatCompletion('https://example.com/chat', streamOptions),
+      streamChatCompletion('https://example.com/chat', { body: requestBody }),
     ).rejects.toSatisfy((error: unknown) => {
       expect(error).toBeInstanceOf(AiClientError);
       expect(error).toMatchObject({ message: 'quota exceeded', status: 429 });
@@ -87,7 +84,7 @@ describe('streamChatCompletion', () => {
     );
 
     await expect(
-      streamChatCompletion('https://example.com/chat', streamOptions),
+      streamChatCompletion('https://example.com/chat', { body: requestBody }),
     ).rejects.toSatisfy((error: unknown) => {
       expect(error).toBeInstanceOf(AiClientError);
       expect(error).toMatchObject({
@@ -107,7 +104,7 @@ describe('streamChatCompletion', () => {
     );
 
     await expect(
-      streamChatCompletion('https://example.com/chat', streamOptions),
+      streamChatCompletion('https://example.com/chat', { body: requestBody }),
     ).rejects.toSatisfy((error: unknown) => {
       expect(error).toBeInstanceOf(AiClientError);
       expect(error).toMatchObject({
