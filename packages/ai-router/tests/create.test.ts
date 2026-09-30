@@ -1,6 +1,6 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
-import type { AiRouterOptions } from '../src/types.js';
+import type { AiRouterOptions, AiRouterProviderError } from '../src/types.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createMock = vi.fn();
@@ -22,11 +22,9 @@ vi.mock('openai', () => ({
 const { createAiRequest } = await import('../src/create.js');
 
 const messages: ChatCompletionMessageParam[] = [{ role: 'user', content: 'hello' }];
-const callerOptions = {
-  model: 'caller-model',
-  messages,
+const callerOptions: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'> = {
   stream: true,
-} as ChatCompletionCreateParamsStreaming;
+};
 
 const baseOptions: AiRouterOptions<['groq', 'open-router']> = {
   fallback: ['groq', 'open-router'],
@@ -56,7 +54,7 @@ describe('createAiRequest', () => {
       baseURL: 'https://api.groq.com/openai/v1',
     });
     expect(createMock).toHaveBeenCalledWith({
-      model: 'caller-model',
+      model: 'openai/gpt-oss-120b',
       messages,
       stream: true,
     });
@@ -111,10 +109,12 @@ describe('createAiRequest', () => {
 
     const create = createAiRequest(baseOptions, null, setLastUsedProvider);
 
-    await expect(create(messages, callerOptions)).rejects.toEqual([
+    const expectedErrors: AiRouterProviderError[] = [
       { providerName: 'groq', error: groqError },
       { providerName: 'open-router', error: openRouterError },
-    ]);
+    ];
+
+    await expect(create(messages, callerOptions)).rejects.toEqual(expectedErrors);
     expect(setLastUsedProvider).not.toHaveBeenCalled();
   });
 
