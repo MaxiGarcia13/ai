@@ -47,14 +47,19 @@ export async function POST(request: Request) {
   const { messages } = await request.json();
 
   const stream = await router.create(messages);
-  const body = writeNdjsonStream(stream);
 
-  return new Response(body, {
-    headers: {
-      'Content-Type': 'application/x-ndjson',
-      'Cache-Control': 'no-cache',
-    },
-  });
+  if (!Array.isArray(stream)) {
+    const body = writeNdjsonStream(stream);
+
+    return new Response(body, {
+      headers: {
+        'Content-Type': 'application/x-ndjson',
+        'Cache-Control': 'no-cache',
+      },
+    });
+  } else {
+    // handle the error
+  }
 }
 ```
 
