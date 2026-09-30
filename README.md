@@ -129,12 +129,8 @@ import { AiClientError, streamChatCompletion } from '@maxigarcia/ai-client';
 
 try {
   const stream = await streamChatCompletion('/api/chat', {
-    messages: [{ role: 'user', content: 'Summarize this PR diff' }],
-    model: 'unused-by-body-but-typed-for-openai-params',
-    stream: true,
-    // optional: auth or other request headers
-    headers: {
-      Authorization: `Bearer ${userToken}`,
+    body: {
+      messages: [{ role: 'user', content: 'Summarize this PR diff' }],
     },
   });
 
