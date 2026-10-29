@@ -1,3 +1,18 @@
+## 0.2.2 (2026-10-29)
+
+### 🧹 Chores
+
+- Update TypeScript configuration for ai-client ([64de5de](https://github.com/MaxiGarcia13/ai/commit/64de5de))
+- Update dependencies and improve code formatting ([7bd3646](https://github.com/MaxiGarcia13/ai/commit/7bd3646))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-utils to 0.1.2
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.2.1 (2026-09-30)
 
 ### 🧱 Updated Dependencies

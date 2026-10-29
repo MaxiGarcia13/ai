@@ -1,3 +1,18 @@
+## 0.1.2 (2026-10-29)
+
+### 🧹 Chores
+
+- Update dependencies and improve code formatting ([7bd3646](https://github.com/MaxiGarcia13/ai/commit/7bd3646))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.8
+- Updated @maxigarcia/ai-utils to 0.1.2
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.1 (2026-09-30)
 
 ### 🔄 Refactors

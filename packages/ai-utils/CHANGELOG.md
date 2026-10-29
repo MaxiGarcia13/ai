@@ -1,3 +1,13 @@
+## 0.1.2 (2026-10-29)
+
+### 🧹 Chores
+
+- Update dependencies and improve code formatting ([7bd3646](https://github.com/MaxiGarcia13/ai/commit/7bd3646))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.1 (2026-09-30)
 
 This was a version bump only for @maxigarcia/ai-utils to align it with other projects, there were no code changes.
