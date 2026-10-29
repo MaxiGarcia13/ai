@@ -44,7 +44,10 @@ describe('readNdjsonStream', () => {
   it('reassembles objects split across multiple stream chunks', async () => {
     const line = `${JSON.stringify(chunkA)}\n`;
     const midpoint = Math.floor(line.length / 2);
-    const body = streamFrom([line.slice(0, midpoint), line.slice(midpoint)]);
+    const body = streamFrom([
+      line.slice(0, midpoint),
+      line.slice(midpoint),
+    ]);
 
     await expect(collect(body)).resolves.toEqual([chunkA]);
   });
@@ -56,7 +59,9 @@ describe('readNdjsonStream', () => {
   });
 
   it('yields a trailing object that is not newline-terminated', async () => {
-    const body = streamFrom([JSON.stringify(chunkA)]);
+    const body = streamFrom([
+      JSON.stringify(chunkA),
+    ]);
 
     await expect(collect(body)).resolves.toEqual([chunkA]);
   });
@@ -73,7 +78,9 @@ describe('readNdjsonStream', () => {
 
   it('throws AiClientError using the nested error message when present', async () => {
     const body = streamFrom([
-      `${JSON.stringify({ error: { message: 'rate limited' } })}\n`,
+      `${JSON.stringify({
+        error: { message: 'rate limited' },
+      })}\n`,
     ]);
 
     await expect(collect(body)).rejects.toSatisfy((error: unknown) => {

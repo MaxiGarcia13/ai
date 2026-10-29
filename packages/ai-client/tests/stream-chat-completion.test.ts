@@ -2,7 +2,9 @@ import { HttpError } from '@maxigarcia/ai-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { streamChatCompletion } from '../src/stream-chat-completion.js';
 
-const messages = [{ role: 'user' as const, content: 'hello' }];
+const messages = [
+  { role: 'user' as const, content: 'hello' },
+];
 const requestBody = {
   messages,
   stream: true as const,

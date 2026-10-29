@@ -4,7 +4,9 @@ import { getGroqProvider } from '../src/providers/groq.js';
 import { getAiProvider } from '../src/providers/index.js';
 import { getOpenRouterProvider } from '../src/providers/open-router.js';
 
-const messages = [{ role: 'user' as const, content: 'hello' }];
+const messages = [
+  { role: 'user' as const, content: 'hello' },
+];
 
 describe('getGroqProvider', () => {
   it('returns client options with the given api key and groq base URL', () => {

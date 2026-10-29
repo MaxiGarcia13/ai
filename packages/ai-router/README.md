@@ -34,6 +34,8 @@ const router = AiRouter({
       apiKey: process.env.GROQ_API_KEY!,
       // optional — defaults to 'openai/gpt-oss-120b'
       model: 'openai/gpt-oss-120b',
+      temperature: 0.2,
+      max_tokens: 1024,
     },
     'open-router': {
       apiKey: process.env.OPENROUTER_API_KEY!,
@@ -80,25 +82,20 @@ export async function POST(request: Request) {
 
 ### `AiRouter` options
 
-| Option                   | Description                        |
-| ------------------------ | ---------------------------------- |
-| `fallback`               | Provider fallback / rotation order |
-| `providers[name].apiKey` | Required API key for that provider |
-| `providers[name].model`  | Optional model for that provider   |
+| Option                   | Description                                                             |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `fallback`               | Provider fallback / rotation order                                      |
+| `providers[name].apiKey` | Required API key for that provider                                      |
+| `providers[name].model`  | Optional model for that provider                                        |
+| `providers[name].*`      | Optional OpenAI chat completion params (`temperature`, `max_tokens`, …) |
 
-### `router.create(messages, options?)`
+Per-provider extras accept any `ChatCompletionCreateParamsStreaming` field except `messages` and `model` (for example `temperature`, `max_tokens`, `tools`).
 
-On success, resolves to an `AsyncIterable` of chat completion chunks. The model comes from each provider's config — it is not passed per request.
+### `router.create(messages)`
+
+On success, resolves to an `AsyncIterable` of chat completion chunks. Model and completion options come from each provider's config — they are not passed per request.
 
 On total failure, **rejects with `AiError[]`** (see [Errors](#errors)).
-
-| Option        | Description                              |
-| ------------- | ---------------------------------------- |
-| `messages`    | Chat messages (first argument)           |
-| `stream`      | Stream the response — defaults to `true` |
-| `temperature` | Sampling temperature                     |
-| `max_tokens`  | Maximum tokens to generate               |
-| `tools`       | Tool / function definitions              |
 
 ### `writeNdjsonStream(stream)`
 

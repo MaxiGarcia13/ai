@@ -23,7 +23,9 @@ vi.mock('openai', () => ({
 const { AiRouter } = await import('../src/router.js');
 const { writeNdjsonStream } = await import('../src/write-ndjson-stream.js');
 
-const messages: ChatCompletionMessageParam[] = [{ role: 'user', content: 'hello' }];
+const messages: ChatCompletionMessageParam[] = [
+  { role: 'user', content: 'hello' },
+];
 
 const options: AiRouterOptions<['groq', 'open-router']> = {
   fallback: ['groq', 'open-router'],
@@ -36,13 +38,25 @@ const options: AiRouterOptions<['groq', 'open-router']> = {
 const chunkA = {
   id: 'chunk-a',
   object: 'chat.completion.chunk',
-  choices: [{ index: 0, delta: { content: 'Hel' }, finish_reason: null }],
+  choices: [
+    {
+      index: 0,
+      delta: { content: 'Hel' },
+      finish_reason: null,
+    },
+  ],
 } as ChatCompletionChunk;
 
 const chunkB = {
   id: 'chunk-b',
   object: 'chat.completion.chunk',
-  choices: [{ index: 0, delta: { content: 'lo' }, finish_reason: 'stop' }],
+  choices: [
+    {
+      index: 0,
+      delta: { content: 'lo' },
+      finish_reason: 'stop',
+    },
+  ],
 } as ChatCompletionChunk;
 
 async function* asAsyncIterable(

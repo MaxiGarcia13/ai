@@ -1,5 +1,5 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
-import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import type { AiRouterOptions } from '../src/types.js';
 import { AiError } from '@maxigarcia/ai-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -22,10 +22,9 @@ vi.mock('openai', () => ({
 
 const { createAiRequest } = await import('../src/create.js');
 
-const messages: ChatCompletionMessageParam[] = [{ role: 'user', content: 'hello' }];
-const callerOptions: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'> = {
-  stream: true,
-};
+const messages: ChatCompletionMessageParam[] = [
+  { role: 'user', content: 'hello' },
+];
 
 const baseOptions: AiRouterOptions<['groq', 'open-router']> = {
   fallback: ['groq', 'open-router'],
@@ -47,7 +46,7 @@ describe('createAiRequest', () => {
     const setLastUsedProvider = vi.fn();
 
     const create = createAiRequest(baseOptions, null, setLastUsedProvider);
-    const result = await create(messages, callerOptions);
+    const result = await create(messages);
 
     expect(OpenAIMock).toHaveBeenCalledTimes(1);
     expect(OpenAIMock).toHaveBeenCalledWith({
@@ -63,6 +62,33 @@ describe('createAiRequest', () => {
     expect(setLastUsedProvider).toHaveBeenCalledWith('groq');
   });
 
+  it('forwards completion options from the provider config', async () => {
+    const response = { id: 'completion-options' };
+    createMock.mockResolvedValueOnce(response);
+    const setLastUsedProvider = vi.fn();
+    const options: AiRouterOptions<['groq']> = {
+      fallback: ['groq'],
+      providers: {
+        groq: {
+          apiKey: 'groq-key',
+          temperature: 0.2,
+          max_tokens: 256,
+        },
+      },
+    };
+
+    const create = createAiRequest(options, null, setLastUsedProvider);
+    await create(messages);
+
+    expect(createMock).toHaveBeenCalledWith({
+      model: 'openai/gpt-oss-120b',
+      messages,
+      stream: true,
+      temperature: 0.2,
+      max_tokens: 256,
+    });
+  });
+
   it('falls through to the next provider when the first create rejects', async () => {
     const firstError = new Error('groq down');
     const response = { id: 'completion-2' };
@@ -70,7 +96,7 @@ describe('createAiRequest', () => {
     const setLastUsedProvider = vi.fn();
 
     const create = createAiRequest(baseOptions, null, setLastUsedProvider);
-    const result = await create(messages, callerOptions);
+    const result = await create(messages);
 
     expect(OpenAIMock).toHaveBeenCalledTimes(2);
     expect(OpenAIMock).toHaveBeenNthCalledWith(1, {
@@ -92,7 +118,7 @@ describe('createAiRequest', () => {
     const setLastUsedProvider = vi.fn();
 
     const create = createAiRequest(baseOptions, 'open-router', setLastUsedProvider);
-    await create(messages, callerOptions);
+    await create(messages);
 
     expect(OpenAIMock).toHaveBeenCalledTimes(1);
     expect(OpenAIMock).toHaveBeenCalledWith({
@@ -116,7 +142,7 @@ describe('createAiRequest', () => {
       new AiError(openRouterError.message, openRouterError.status, 'open-router'),
     ];
 
-    await expect(create(messages, callerOptions)).rejects.toEqual(expectedErrors);
+    await expect(create(messages)).rejects.toEqual(expectedErrors);
     expect(setLastUsedProvider).not.toHaveBeenCalled();
   });
 
@@ -132,7 +158,7 @@ describe('createAiRequest', () => {
 
     const create = createAiRequest(options, null, setLastUsedProvider);
 
-    await expect(create(messages, callerOptions)).rejects.toThrow(
+    await expect(create(messages)).rejects.toThrow(
       'API key for provider groq not found',
     );
     expect(OpenAIMock).not.toHaveBeenCalled();
@@ -146,13 +172,15 @@ describe('createAiRequest', () => {
       providers: {
         'groq': { apiKey: 'groq-key' },
         'open-router': { apiKey: 'open-router-key' },
-        ...({ unknown: { apiKey: 'unknown-key' } } as object),
+        ...({
+          unknown: { apiKey: 'unknown-key' },
+        } as object),
       } as AiRouterOptions['providers'],
     };
 
     const create = createAiRequest(options, null, setLastUsedProvider);
 
-    await expect(create(messages, callerOptions)).rejects.toThrow(
+    await expect(create(messages)).rejects.toThrow(
       'Provider unknown not found',
     );
     expect(OpenAIMock).not.toHaveBeenCalled();

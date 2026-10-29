@@ -12,7 +12,7 @@ export interface AiProviderConfig<ProviderName extends AiProviderName = AiProvid
   getCreateParams: (
     options: {
       messages: ChatCompletionMessageParam[];
-      model?: AiProviderModels[ProviderName];
+      model?: AiProviderModels[ProviderName] | string;
     },
   ) => ChatCompletionCreateParamsStreaming;
   getModelLimits: (model?: string) => AiModelLimits;

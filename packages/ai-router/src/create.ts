@@ -1,5 +1,5 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
-import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
+import type { ChatCompletionMessageParam } from 'openai/resources';
 import type { AiRouterInterface, AiRouterOptions } from './types.js';
 import { AiError, isHttpError } from '@maxigarcia/ai-utils';
 import OpenAI from 'openai';
@@ -13,10 +13,7 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
   lastUsedProvider: AiProviderName | null,
   setLastUsedProvider: (provider: AiProviderName) => void,
 ): AiRouterInterface['create'] {
-  return async (
-    messages: ChatCompletionMessageParam[],
-    options?: Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model'>,
-  ) => {
+  return async (messages: ChatCompletionMessageParam[]) => {
     const errors: Array<AiError> = [];
     const providerNames = uniqueProvider(fallback);
     const providersOrder = balanceProvidersOrder(lastUsedProvider, providerNames);
@@ -34,17 +31,18 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
         throw new Error(`Provider ${providerName} not found`);
       }
 
-      const provider = providerFn(config.apiKey);
+      const { apiKey, model, ...providerOptions } = config;
+      const provider = providerFn(apiKey);
 
       try {
-        const client = new OpenAI(provider.getClientOptions(config.apiKey));
-        const baseParams = provider.getCreateParams({ messages, model: config.model });
-        const model = baseParams.model;
+        const client = new OpenAI(provider.getClientOptions(apiKey));
+        const baseParams = provider.getCreateParams({ messages, model });
+        const resolvedModel = baseParams.model;
 
-        const limits = provider.getModelLimits(model);
+        const limits = provider.getModelLimits(resolvedModel);
 
-        const maxOutputTokens = options?.max_completion_tokens
-          ?? options?.max_tokens
+        const maxOutputTokens = providerOptions.max_completion_tokens
+          ?? providerOptions.max_tokens
           ?? limits.maxOutputTokens;
         const trimmedMessages = trimMessagesForModel(
           messages,
@@ -53,12 +51,12 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
         );
         const createParams = provider.getCreateParams({
           messages: trimmedMessages,
-          model: config.model,
+          model,
         });
 
         const response = await client.chat.completions.create({
           ...createParams,
-          ...options,
+          ...providerOptions,
         });
 
         setLastUsedProvider(providerName);

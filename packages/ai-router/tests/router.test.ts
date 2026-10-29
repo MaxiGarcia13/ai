@@ -1,4 +1,4 @@
-import type { ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources/chat/completions';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import type { AiRouterOptions } from '../src/types.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -20,12 +20,9 @@ vi.mock('openai', () => ({
 
 const { AiRouter } = await import('../src/router.js');
 
-const messages: ChatCompletionMessageParam[] = [{ role: 'user', content: 'hello' }];
-const callerOptions = {
-  model: 'caller-model',
-  messages,
-  stream: true,
-} as ChatCompletionCreateParamsStreaming;
+const messages: ChatCompletionMessageParam[] = [
+  { role: 'user', content: 'hello' },
+];
 
 const options: AiRouterOptions<['groq', 'open-router']> = {
   fallback: ['groq', 'open-router'],
@@ -50,7 +47,7 @@ describe('aiRouter', () => {
     expect(client.create).toBeTypeOf('function');
     expect(client.lastUsedProvider).toBeNull();
 
-    const result = await client.create(messages, callerOptions);
+    const result = await client.create(messages);
 
     expect(result).toBe(response);
     expect(OpenAIMock).toHaveBeenCalledWith({
@@ -64,7 +61,7 @@ describe('aiRouter', () => {
     createMock.mockRejectedValueOnce(new Error('groq down')).mockResolvedValueOnce(response);
 
     const client = AiRouter(options);
-    const result = await client.create(messages, callerOptions);
+    const result = await client.create(messages);
 
     expect(result).toBe(response);
     expect(OpenAIMock).toHaveBeenCalledTimes(2);

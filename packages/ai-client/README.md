@@ -23,7 +23,9 @@ import { isHttpError } from '@maxigarcia/ai-utils';
 try {
   const stream = await streamChatCompletion('/api/chat', {
     body: {
-      messages: [{ role: 'user', content: 'Summarize this PR diff' }],
+      messages: [
+        { role: 'user', content: 'Summarize this PR diff' }
+      ],
     },
   });
 

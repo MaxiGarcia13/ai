@@ -41,7 +41,11 @@ export function trimMessagesToContext(
 
   if (remainingChars <= chatTemplateOverheadChars) {
     const lastUserMessage = messages.findLast((message) => message.role === 'user');
-    return lastUserMessage ? [truncateMessage(lastUserMessage, remainingChars, chatTemplateOverheadChars)] : [];
+    return lastUserMessage
+      ? [
+          truncateMessage(lastUserMessage, remainingChars, chatTemplateOverheadChars),
+        ]
+      : [];
   }
 
   const kept: Options['messages'] = [];
@@ -73,7 +77,9 @@ export function trimMessagesToContext(
 }
 
 function getMessageContent(message: ChatCompletionMessageParam): string {
-  return typeof message.content === 'string' ? message.content : '';
+  return typeof message.content === 'string'
+    ? message.content
+    : '';
 }
 
 function getMessageCharCount(message: ChatCompletionMessageParam, chatTemplateOverheadChars: number): number {

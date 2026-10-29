@@ -45,7 +45,9 @@ function parseLlmStreamLine(line: string): ChatCompletionChunk {
 
   if ('error' in parsed && parsed.error) {
     const error = parsed.error;
-    const message = typeof error === 'string' ? error : error.message ?? 'Request failed';
+    const message = typeof error === 'string'
+      ? error
+      : error.message ?? 'Request failed';
     throw new Error(message);
   }
 

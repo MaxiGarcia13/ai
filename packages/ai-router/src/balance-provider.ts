@@ -6,5 +6,8 @@ export function balanceProvidersOrder(lastUsedProvider: AiProviderName | null, o
   }
 
   const index = order.indexOf(lastUsedProvider);
-  return [...order.slice(index), ...order.slice(0, index)];
+  return [
+    ...order.slice(index),
+    ...order.slice(0, index),
+  ];
 }

@@ -12,7 +12,9 @@ export function writeNdjsonStream(
         }
         controller.close();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Request failed';
+        const message = error instanceof Error
+          ? error.message
+          : 'Request failed';
         controller.enqueue(encoder.encode(`${JSON.stringify({ error: message })}\n`));
         controller.close();
       }

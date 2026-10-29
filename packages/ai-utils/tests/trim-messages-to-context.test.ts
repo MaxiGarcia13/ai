@@ -14,7 +14,11 @@ function assistant(content: string): ChatCompletionMessageParam {
 
 describe('trimMessagesToContext', () => {
   it('returns all messages when they fit in the context window', () => {
-    const messages = [user('hello'), assistant('hi'), user('how are you?')];
+    const messages = [
+      user('hello'),
+      assistant('hi'),
+      user('how are you?'),
+    ];
 
     const result = trimMessagesToContext({
       messages,
@@ -49,7 +53,9 @@ describe('trimMessagesToContext', () => {
       chatTemplateOverheadChars: overhead,
     });
 
-    expect(result).toEqual([user('c')]);
+    expect(result).toEqual([
+      user('c'),
+    ]);
   });
 
   it('keeps multiple recent messages when they fit together', () => {
@@ -68,11 +74,16 @@ describe('trimMessagesToContext', () => {
       chatTemplateOverheadChars: overhead,
     });
 
-    expect(result).toEqual([user('a'), user('b')]);
+    expect(result).toEqual([
+      user('a'),
+      user('b'),
+    ]);
   });
 
   it('truncates the newest message to the remaining content budget', () => {
-    const messages = [user('ABCDEFGHIJKLMNOPQRSTUVWXYZ')];
+    const messages = [
+      user('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+    ];
 
     const result = trimMessagesToContext({
       messages,
@@ -83,7 +94,9 @@ describe('trimMessagesToContext', () => {
       chatTemplateOverheadChars: overhead,
     });
 
-    expect(result).toEqual([user('UVWXYZ')]);
+    expect(result).toEqual([
+      user('UVWXYZ'),
+    ]);
   });
 
   it('drops a leading assistant message after trimming', () => {
@@ -102,11 +115,16 @@ describe('trimMessagesToContext', () => {
       chatTemplateOverheadChars: overhead,
     });
 
-    expect(result).toEqual([user('second')]);
+    expect(result).toEqual([
+      user('second'),
+    ]);
   });
 
   it('keeps a leading user message even when an assistant follows', () => {
-    const messages = [user('ask'), assistant('ans')];
+    const messages = [
+      user('ask'),
+      assistant('ans'),
+    ];
 
     const result = trimMessagesToContext({
       messages,
@@ -135,12 +153,16 @@ describe('trimMessagesToContext', () => {
       chatTemplateOverheadChars: overhead,
     });
 
-    expect(result).toEqual([user('ABCDEFGHIJKLMNOP')]);
+    expect(result).toEqual([
+      user('ABCDEFGHIJKLMNOP'),
+    ]);
   });
 
   it('returns an empty array when budget is exhausted and there is no user message', () => {
     const result = trimMessagesToContext({
-      messages: [assistant('only assistant')],
+      messages: [
+        assistant('only assistant'),
+      ],
       systemPrompt: '01234567890123456789',
       contextWindowSize: 40,
       maxOutputTokens: 0,
@@ -153,7 +175,12 @@ describe('trimMessagesToContext', () => {
 
   it('treats non-string message content as empty for sizing', () => {
     const messages: ChatCompletionMessageParam[] = [
-      { role: 'user', content: [{ type: 'text', text: 'ignored by sizer' }] },
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text: 'ignored by sizer' },
+        ],
+      },
       user('kept'),
     ];
 
@@ -166,6 +193,8 @@ describe('trimMessagesToContext', () => {
       chatTemplateOverheadChars: overhead,
     });
 
-    expect(result).toEqual([user('kept')]);
+    expect(result).toEqual([
+      user('kept'),
+    ]);
   });
 });

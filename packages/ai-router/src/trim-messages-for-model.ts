@@ -2,7 +2,9 @@ import type { ChatCompletionMessageParam } from 'openai/resources';
 import { trimMessagesToContext } from '@maxigarcia/ai-utils';
 
 function getMessageContent(message: ChatCompletionMessageParam): string {
-  return typeof message.content === 'string' ? message.content : '';
+  return typeof message.content === 'string'
+    ? message.content
+    : '';
 }
 
 export function trimMessagesForModel(
