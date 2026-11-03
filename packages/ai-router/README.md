@@ -89,13 +89,57 @@ export async function POST(request: Request) {
 | `providers[name].model`  | Optional model for that provider                                        |
 | `providers[name].*`      | Optional OpenAI chat completion params (`temperature`, `max_tokens`, …) |
 
-Per-provider extras accept any `ChatCompletionCreateParamsStreaming` field except `messages` and `model` (for example `temperature`, `max_tokens`, `tools`).
+Per-provider extras accept OpenAI chat completion fields except `messages`, `model`, `stream`, `tools`, `tool_choice`, and `parallel_tool_calls` (for example `temperature`, `max_tokens`). Pass tools per `create` call instead.
 
-### `router.create(messages)`
+### `router.create(messages, options?)`
 
-On success, resolves to an `AsyncIterable` of chat completion chunks. Model and completion options come from each provider's config — they are not passed per request.
+Default (`stream: true` / omitted): resolves to an `AsyncIterable` of chat completion chunks for `writeNdjsonStream` / the browser client.
 
-On total failure, **rejects with `AiError[]`** (see [Errors](#errors)).
+With `{ stream: false }`: resolves to a full `ChatCompletion` (including `choices[0].message.tool_calls`) for agent / tool rounds.
+
+| Call option            | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| `stream`               | Default `true`. Use `false` for tool rounds      |
+| `tools`                | OpenAI tool definitions for this request         |
+| `tool_choice`          | OpenAI `tool_choice` for this request            |
+| `parallel_tool_calls`  | Optional parallel tool-call flag                 |
+
+Model and tuning options still come from each provider's config. On total failure, **rejects with `AiError[]`** (see [Errors](#errors)).
+
+#### Tool rounds then stream the answer
+
+Keep tools off the final UI stream. Run silent non-stream rounds, execute tools in your app, then stream once:
+
+```ts
+const conversation = [...messages];
+
+for (let i = 0; i < maxToolRounds; i++) {
+  const completion = await router.create(conversation, {
+    stream: false,
+    tools,
+    tool_choice: 'auto',
+  });
+  const message = completion.choices[0]?.message;
+  if (!message?.tool_calls?.length) break;
+
+  conversation.push(message);
+  for (const call of message.tool_calls) {
+    conversation.push({
+      role: 'tool',
+      tool_call_id: call.id,
+      content: await runTool(call), // app / MCP — not the router
+    });
+  }
+}
+
+const stream = await router.create(conversation);
+return new Response(writeNdjsonStream(stream), {
+  headers: {
+    'Content-Type': 'application/x-ndjson',
+    'Cache-Control': 'no-cache',
+  },
+});
+```
 
 ### `writeNdjsonStream(stream)`
 

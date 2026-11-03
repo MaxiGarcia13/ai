@@ -7,16 +7,16 @@ export function AiRouter<const TFallback extends Array<AiProviderName>>(
 ): AiRouterInterface {
   let lastUsedProvider: AiProviderName | null = null;
 
-  const setLastUsedProvider = (provider: AiProviderName) => {
-    lastUsedProvider = provider;
-  };
-
   return {
-    lastUsedProvider,
+    get lastUsedProvider() {
+      return lastUsedProvider;
+    },
     create: createAiRequest(
       options,
-      lastUsedProvider,
-      setLastUsedProvider,
+      () => lastUsedProvider,
+      (provider) => {
+        lastUsedProvider = provider;
+      },
     ),
   };
 }

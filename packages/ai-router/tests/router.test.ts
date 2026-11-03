@@ -50,6 +50,7 @@ describe('aiRouter', () => {
     const result = await client.create(messages);
 
     expect(result).toBe(response);
+    expect(client.lastUsedProvider).toBe('groq');
     expect(OpenAIMock).toHaveBeenCalledWith({
       apiKey: 'groq-key',
       baseURL: 'https://api.groq.com/openai/v1',
@@ -64,8 +65,30 @@ describe('aiRouter', () => {
     const result = await client.create(messages);
 
     expect(result).toBe(response);
+    expect(client.lastUsedProvider).toBe('open-router');
     expect(OpenAIMock).toHaveBeenCalledTimes(2);
     expect(OpenAIMock).toHaveBeenNthCalledWith(2, {
+      apiKey: 'open-router-key',
+      baseURL: 'https://openrouter.ai/api/v1',
+    });
+  });
+
+  it('starts the next create from the last successful provider', async () => {
+    createMock
+      .mockRejectedValueOnce(new Error('groq down'))
+      .mockResolvedValueOnce({ id: 'completion-1' })
+      .mockResolvedValueOnce({ id: 'completion-2' });
+
+    const client = AiRouter(options);
+
+    await client.create(messages);
+    expect(client.lastUsedProvider).toBe('open-router');
+
+    OpenAIMock.mockClear();
+    await client.create(messages);
+
+    expect(OpenAIMock).toHaveBeenCalledTimes(1);
+    expect(OpenAIMock).toHaveBeenCalledWith({
       apiKey: 'open-router-key',
       baseURL: 'https://openrouter.ai/api/v1',
     });

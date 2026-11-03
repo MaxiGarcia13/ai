@@ -26,6 +26,16 @@ const messages: ChatCompletionMessageParam[] = [
   { role: 'user', content: 'hello' },
 ];
 
+const tools = [
+  {
+    type: 'function' as const,
+    function: {
+      name: 'get_weather',
+      parameters: { type: 'object', properties: {} },
+    },
+  },
+];
+
 const baseOptions: AiRouterOptions<['groq', 'open-router']> = {
   fallback: ['groq', 'open-router'],
   providers: {
@@ -45,7 +55,7 @@ describe('createAiRequest', () => {
     createMock.mockResolvedValueOnce(response);
     const setLastUsedProvider = vi.fn();
 
-    const create = createAiRequest(baseOptions, null, setLastUsedProvider);
+    const create = createAiRequest(baseOptions, () => null, setLastUsedProvider);
     const result = await create(messages);
 
     expect(OpenAIMock).toHaveBeenCalledTimes(1);
@@ -77,7 +87,7 @@ describe('createAiRequest', () => {
       },
     };
 
-    const create = createAiRequest(options, null, setLastUsedProvider);
+    const create = createAiRequest(options, () => null, setLastUsedProvider);
     await create(messages);
 
     expect(createMock).toHaveBeenCalledWith({
@@ -89,13 +99,38 @@ describe('createAiRequest', () => {
     });
   });
 
+  it('passes stream false and call tools for non-stream completions', async () => {
+    const response = {
+      id: 'completion-tools',
+      choices: [{ message: { role: 'assistant', tool_calls: [] } }],
+    };
+    createMock.mockResolvedValueOnce(response);
+    const setLastUsedProvider = vi.fn();
+
+    const create = createAiRequest(baseOptions, () => null, setLastUsedProvider);
+    const result = await create(messages, {
+      stream: false,
+      tools,
+      tool_choice: 'auto',
+    });
+
+    expect(createMock).toHaveBeenCalledWith({
+      model: 'openai/gpt-oss-120b',
+      messages,
+      stream: false,
+      tools,
+      tool_choice: 'auto',
+    });
+    expect(result).toBe(response);
+  });
+
   it('falls through to the next provider when the first create rejects', async () => {
     const firstError = new Error('groq down');
     const response = { id: 'completion-2' };
     createMock.mockRejectedValueOnce(firstError).mockResolvedValueOnce(response);
     const setLastUsedProvider = vi.fn();
 
-    const create = createAiRequest(baseOptions, null, setLastUsedProvider);
+    const create = createAiRequest(baseOptions, () => null, setLastUsedProvider);
     const result = await create(messages);
 
     expect(OpenAIMock).toHaveBeenCalledTimes(2);
@@ -117,7 +152,7 @@ describe('createAiRequest', () => {
     createMock.mockResolvedValueOnce(response);
     const setLastUsedProvider = vi.fn();
 
-    const create = createAiRequest(baseOptions, 'open-router', setLastUsedProvider);
+    const create = createAiRequest(baseOptions, () => 'open-router', setLastUsedProvider);
     await create(messages);
 
     expect(OpenAIMock).toHaveBeenCalledTimes(1);
@@ -135,7 +170,7 @@ describe('createAiRequest', () => {
     createMock.mockRejectedValueOnce(groqError).mockRejectedValueOnce(openRouterError);
     const setLastUsedProvider = vi.fn();
 
-    const create = createAiRequest(baseOptions, null, setLastUsedProvider);
+    const create = createAiRequest(baseOptions, () => null, setLastUsedProvider);
 
     const expectedErrors: AiError[] = [
       new AiError(groqError.message, groqError.status, 'groq'),
@@ -156,7 +191,7 @@ describe('createAiRequest', () => {
       },
     };
 
-    const create = createAiRequest(options, null, setLastUsedProvider);
+    const create = createAiRequest(options, () => null, setLastUsedProvider);
 
     await expect(create(messages)).rejects.toThrow(
       'API key for provider groq not found',
@@ -178,7 +213,7 @@ describe('createAiRequest', () => {
       } as AiRouterOptions['providers'],
     };
 
-    const create = createAiRequest(options, null, setLastUsedProvider);
+    const create = createAiRequest(options, () => null, setLastUsedProvider);
 
     await expect(create(messages)).rejects.toThrow(
       'Provider unknown not found',

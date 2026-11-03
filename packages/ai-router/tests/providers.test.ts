@@ -18,13 +18,12 @@ describe('getGroqProvider', () => {
     });
   });
 
-  it('uses the default model and stream true', () => {
+  it('uses the default model without forcing stream', () => {
     const provider = getGroqProvider('groq-key');
 
     expect(provider.getCreateParams({ messages })).toEqual({
       model: 'openai/gpt-oss-120b',
       messages,
-      stream: true,
     });
   });
 
@@ -34,7 +33,6 @@ describe('getGroqProvider', () => {
     expect(provider.getCreateParams({ messages, model: 'openai/gpt-oss-120b' })).toEqual({
       model: 'openai/gpt-oss-120b',
       messages,
-      stream: true,
     });
   });
 
@@ -67,13 +65,12 @@ describe('getOpenRouterProvider', () => {
     });
   });
 
-  it('uses the default model and stream true', () => {
+  it('uses the default model without forcing stream', () => {
     const provider = getOpenRouterProvider('open-router-key');
 
     expect(provider.getCreateParams({ messages })).toEqual({
       model: 'openrouter/free',
       messages,
-      stream: true,
     });
   });
 
@@ -83,7 +80,6 @@ describe('getOpenRouterProvider', () => {
     expect(provider.getCreateParams({ messages, model: 'openrouter/free' })).toEqual({
       model: 'openrouter/free',
       messages,
-      stream: true,
     });
   });
 

@@ -18,7 +18,6 @@ export function getGroqProvider(apiKey: string): AiProviderConfig<'groq'> {
     getCreateParams: ({ messages, model = DEFAULT_MODEL }) => ({
       model,
       messages,
-      stream: true,
     }),
     getModelLimits: (model = DEFAULT_MODEL) =>
       MODEL_LIMITS[model] ?? MODEL_LIMITS[DEFAULT_MODEL]!,

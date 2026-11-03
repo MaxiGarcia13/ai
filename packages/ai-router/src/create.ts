@@ -1,6 +1,10 @@
 import type { AiProviderName } from '@maxigarcia/ai-types';
 import type { ChatCompletionMessageParam } from 'openai/resources';
-import type { AiRouterInterface, AiRouterOptions } from './types.js';
+import type {
+  AiRouterCreateOptions,
+  AiRouterInterface,
+  AiRouterOptions,
+} from './types.js';
 import { AiError, isHttpError } from '@maxigarcia/ai-utils';
 import OpenAI from 'openai';
 import { balanceProvidersOrder } from './balance-provider.js';
@@ -10,13 +14,17 @@ import { uniqueProvider } from './unique-provider.js';
 
 export function createAiRequest<const TFallback extends Array<AiProviderName>>(
   { fallback, providers }: AiRouterOptions<TFallback>,
-  lastUsedProvider: AiProviderName | null,
+  getLastUsedProvider: () => AiProviderName | null,
   setLastUsedProvider: (provider: AiProviderName) => void,
 ): AiRouterInterface['create'] {
-  return async (messages: ChatCompletionMessageParam[]) => {
+  return (async (
+    messages: ChatCompletionMessageParam[],
+    options: AiRouterCreateOptions = {},
+  ) => {
+    const { stream = true, ...callOptions } = options;
     const errors: Array<AiError> = [];
     const providerNames = uniqueProvider(fallback);
-    const providersOrder = balanceProvidersOrder(lastUsedProvider, providerNames);
+    const providersOrder = balanceProvidersOrder(getLastUsedProvider(), providerNames);
 
     for (const providerName of providersOrder) {
       const config = providers[providerName as TFallback[number]];
@@ -54,10 +62,19 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
           model,
         });
 
-        const response = await client.chat.completions.create({
-          ...createParams,
-          ...providerOptions,
-        });
+        const response = stream
+          ? await client.chat.completions.create({
+            ...createParams,
+            ...providerOptions,
+            ...callOptions,
+            stream: true,
+          })
+          : await client.chat.completions.create({
+            ...createParams,
+            ...providerOptions,
+            ...callOptions,
+            stream: false,
+          });
 
         setLastUsedProvider(providerName);
 
@@ -72,5 +89,5 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
     }
 
     return Promise.reject(errors);
-  };
+  }) as AiRouterInterface['create'];
 }
