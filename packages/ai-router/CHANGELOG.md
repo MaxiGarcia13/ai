@@ -1,3 +1,18 @@
+## 0.1.3 (2026-11-03)
+
+### 🧹 Chores
+
+- Update package-lock.json and enhance AiRouterInterface ([c6b499d](https://github.com/MaxiGarcia13/ai/commit/c6b499d))
+
+### 🧱 Updated Dependencies
+
+- Updated @maxigarcia/ai-types to 0.0.9
+- Updated @maxigarcia/ai-utils to 0.1.3
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.2 (2026-10-29)
 
 ### 🧹 Chores

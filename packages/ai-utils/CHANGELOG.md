@@ -1,3 +1,7 @@
+## 0.1.3 (2026-11-03)
+
+This was a version bump only for @maxigarcia/ai-utils to align it with other projects, there were no code changes.
+
 ## 0.1.2 (2026-10-29)
 
 ### 🧹 Chores
