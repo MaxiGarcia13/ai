@@ -1,3 +1,13 @@
+## 0.2.1 (2026-11-03)
+
+### 🔄 Refactors
+
+- Simplify response handling in createAiRequest function ([ad03b7d](https://github.com/MaxiGarcia13/ai/commit/ad03b7d))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.2.0 (2026-11-03)
 
 ### 🚀 Features
