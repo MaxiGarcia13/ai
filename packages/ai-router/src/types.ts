@@ -18,14 +18,13 @@ export type AiRouterCreateOptions = AiRouterCallOptions & {
 
 export interface AiRouterInterface {
   readonly lastUsedProvider: AiProviderName | null;
-  create(
+  create: ((
     messages: ChatCompletionMessageParam[],
     options: AiRouterCallOptions & { stream: false },
-  ): Promise<ChatCompletion>;
-  create(
+  ) => Promise<ChatCompletion>) & ((
     messages: ChatCompletionMessageParam[],
     options?: AiRouterCallOptions & { stream?: true },
-  ): Promise<AsyncIterable<ChatCompletionChunk>>;
+  ) => Promise<AsyncIterable<ChatCompletionChunk>>);
 }
 
 export type AiRouterCompletionParams = Omit<
