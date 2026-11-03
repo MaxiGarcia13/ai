@@ -97,12 +97,12 @@ Default (`stream: true` / omitted): resolves to an `AsyncIterable` of chat compl
 
 With `{ stream: false }`: resolves to a full `ChatCompletion` (including `choices[0].message.tool_calls`) for agent / tool rounds.
 
-| Call option            | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| `stream`               | Default `true`. Use `false` for tool rounds      |
-| `tools`                | OpenAI tool definitions for this request         |
-| `tool_choice`          | OpenAI `tool_choice` for this request            |
-| `parallel_tool_calls`  | Optional parallel tool-call flag                 |
+| Call option           | Description                                 |
+| --------------------- | ------------------------------------------- |
+| `stream`              | Default `true`. Use `false` for tool rounds |
+| `tools`               | OpenAI tool definitions for this request    |
+| `tool_choice`         | OpenAI `tool_choice` for this request       |
+| `parallel_tool_calls` | Optional parallel tool-call flag            |
 
 Model and tuning options still come from each provider's config. On total failure, **rejects with `AiError[]`** (see [Errors](#errors)).
 
@@ -120,7 +120,8 @@ for (let i = 0; i < maxToolRounds; i++) {
     tool_choice: 'auto',
   });
   const message = completion.choices[0]?.message;
-  if (!message?.tool_calls?.length) break;
+  if (!message?.tool_calls?.length)
+    break;
 
   conversation.push(message);
   for (const call of message.tool_calls) {

@@ -102,7 +102,11 @@ describe('createAiRequest', () => {
   it('passes stream false and call tools for non-stream completions', async () => {
     const response = {
       id: 'completion-tools',
-      choices: [{ message: { role: 'assistant', tool_calls: [] } }],
+      choices: [
+        {
+          message: { role: 'assistant', tool_calls: [] },
+        },
+      ],
     };
     createMock.mockResolvedValueOnce(response);
     const setLastUsedProvider = vi.fn();
