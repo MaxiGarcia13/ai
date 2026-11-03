@@ -9,8 +9,10 @@ export interface AiRouterInterface {
   ) => Promise<AsyncIterable<ChatCompletionChunk> | Array<AiError>>;
 }
 
+export type AiRouterCompletionParams = Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model' | 'stream'>;
+
 export interface AiRouterProviderConfig<K extends AiProviderName>
-  extends Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model' | 'stream'> {
+  extends AiRouterCompletionParams {
   apiKey: string;
   model?: AiProviderModels[K] | string;
 }
