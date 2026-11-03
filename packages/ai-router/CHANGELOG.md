@@ -1,3 +1,13 @@
+## 0.1.4 (2026-11-03)
+
+### 🔄 Refactors
+
+- Simplify AiRouterProviderConfig by extending AiRouterCompletionParams ([34ca1d5](https://github.com/MaxiGarcia13/ai/commit/34ca1d5))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.3 (2026-11-03)
 
 ### 🧹 Chores
