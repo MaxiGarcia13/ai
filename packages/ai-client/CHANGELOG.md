@@ -1,3 +1,13 @@
+## 0.3.0 (2026-11-03)
+
+### 🚀 Features
+
+- Introduce createChat for managing chat sessions and enhance README ([fb84781](https://github.com/MaxiGarcia13/ai/commit/fb84781))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.2.3 (2026-11-03)
 
 ### 🧱 Updated Dependencies
