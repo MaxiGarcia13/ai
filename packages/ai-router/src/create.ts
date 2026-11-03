@@ -62,19 +62,12 @@ export function createAiRequest<const TFallback extends Array<AiProviderName>>(
           model,
         });
 
-        const response = stream
-          ? await client.chat.completions.create({
-              ...createParams,
-              ...providerOptions,
-              ...callOptions,
-              stream: true,
-            })
-          : await client.chat.completions.create({
-              ...createParams,
-              ...providerOptions,
-              ...callOptions,
-              stream: false,
-            });
+        const response = await client.chat.completions.create({
+          ...createParams,
+          ...providerOptions,
+          ...callOptions,
+          stream,
+        });
 
         setLastUsedProvider(providerName);
 
