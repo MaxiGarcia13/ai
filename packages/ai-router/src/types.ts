@@ -2,6 +2,13 @@ import type { AiProviderModels, AiProviderName } from '@maxigarcia/ai-types';
 import type { AiError } from '@maxigarcia/ai-utils';
 import type { ChatCompletionChunk, ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
 
+export interface AiRouterInterface {
+  lastUsedProvider: AiProviderName | null;
+  create: (
+    messages: ChatCompletionMessageParam[],
+  ) => Promise<AsyncIterable<ChatCompletionChunk> | Array<AiError>>;
+}
+
 export interface AiRouterProviderConfig<K extends AiProviderName>
   extends Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model' | 'stream'> {
   apiKey: string;
@@ -15,11 +22,4 @@ export interface AiRouterOptions<
   providers: {
     [K in TFallback[number]]: AiRouterProviderConfig<K>;
   };
-}
-
-export interface AiRouterInterface {
-  lastUsedProvider: AiProviderName | null;
-  create: (
-    messages: ChatCompletionMessageParam[],
-  ) => Promise<AsyncIterable<ChatCompletionChunk> | Array<AiError>>;
 }
