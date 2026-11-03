@@ -2,7 +2,7 @@ import type { AiProviderModels, AiProviderName } from '@maxigarcia/ai-types';
 import type { AiError } from '@maxigarcia/ai-utils';
 import type { ChatCompletionChunk, ChatCompletionCreateParamsStreaming, ChatCompletionMessageParam } from 'openai/resources';
 
-export interface AiProviderConfig<K extends AiProviderName>
+export interface AiRouterProviderConfig<K extends AiProviderName>
   extends Omit<ChatCompletionCreateParamsStreaming, 'messages' | 'model' | 'stream'> {
   apiKey: string;
   model?: AiProviderModels[K] | string;
@@ -13,7 +13,7 @@ export interface AiRouterOptions<
 > {
   fallback: TFallback;
   providers: {
-    [K in TFallback[number]]: AiProviderConfig<K>;
+    [K in TFallback[number]]: AiRouterProviderConfig<K>;
   };
 }
 
