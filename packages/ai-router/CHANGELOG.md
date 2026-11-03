@@ -1,3 +1,21 @@
+## 0.2.0 (2026-11-03)
+
+### 🚀 Features
+
+- Enhance AiRouter with new options for chat completions and update README ([24bbee9](https://github.com/MaxiGarcia13/ai/commit/24bbee9))
+
+### 🐞 Fixes
+
+- Improve formatting in README and refactor createAiRequest for consistency ([aee76a5](https://github.com/MaxiGarcia13/ai/commit/aee76a5))
+
+### 🔄 Refactors
+
+- Update AiRouterInterface create method signatures for clarity ([5c290ff](https://github.com/MaxiGarcia13/ai/commit/5c290ff))
+
+### ❤️ Thank You
+
+- Maximiliano Garcia Mortigliengo
+
 ## 0.1.4 (2026-11-03)
 
 ### 🔄 Refactors
